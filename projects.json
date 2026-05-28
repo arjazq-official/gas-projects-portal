@@ -1,0 +1,76 @@
+{
+  "projects": [
+    {
+      "key": "sca-bos",
+      "title": "SCA-BOS-GAS",
+      "subtitle": "Sistem Cetak Administrasi BOS & Perencanaan Keuangan",
+      "badge": "Sistem Keuangan",
+      "color": "purple",
+      "techStack": ["Google Apps Script", "Google Sheets", "HTML5", "Tailwind CSS", "JavaScript", "Telegram API"],
+      "githubUrl": "https://github.com/arjazq/sca-bos-gas",
+      "demoUrl": "sca-bos/",
+      "desc": "Sistem Cetak Administrasi BOS sekolah terintegrasi Spreadsheet. Mempermudah perencanaan anggaran, pencatatan transaksi, kuitansi, dan dokumen dinas.",
+      "features": [
+        "Arsitektur Hub & Spoke memisahkan Master Hub (Pusat) dan Spoke (Sekolah) secara otomatis.",
+        "Manajemen Lisensi Terpusat (License Hub) dengan inisialisasi regional Kabupaten NTB.",
+        "Otomatisasi masa berlaku lisensi selama 1 tahun dan validasi ID laptop pengguna.",
+        "Panduan konsultasi Telegram terintegrasi langsung pada halaman login.",
+        "Otomatis menyiapkan struktur spreadsheet dan kolom master lisensi lewat sekali run.",
+        "Sistem multi-deploy massal untuk update instan ke ratusan sekolah client via CLI."
+      ],
+      "credentials": [
+        { "role": "Master Hub (Pusat)", "user": "admin", "pass": "master123" },
+        { "role": "Sekolah / Client (Spoke)", "user": "admin", "pass": "123456" }
+      ],
+      "setupGuide": "// Langkah 1: Persiapan Lingkungan\n// Pastikan Node.js terinstal, lalu instal clasp & login:\nnpm install -g @google/clasp\nclasp login\n\n// Langkah 2: Inisialisasi Master Hub (Pusat)\n// Buka Spreadsheet Master Lisensi Anda, hubungkan dengan clasp dan push folder:\nnode multi-deploy.js Master\n\n// Langkah 3: Setup Kolom & Triggers Master\n// Di editor GAS Master, jalankan fungsi:\n1. apiInitMasterSheet  // Menyiapkan susunan kolom\n2. apiInitHubData      // Mengisi data dropdown Kabupaten NTB\n3. installMasterTriggers // Mengaktifkan durasi expired otomatis 1 tahun\n\n// Langkah 4: Hubungkan Sekolah (Client/Spoke)\n// Deploy GAS Master sebagai Web App (Access: Anyone) dan salin URL-nya.\n// Di setiap naskah GAS sekolah, tambahkan Script Property:\nLICENSE_SERVER_URL = \"URL_WEB_APP_MASTER_ANDA\"\n\n// Langkah 5: Distribusikan Update Massal\n// Jalankan update ke seluruh sekolah terdaftar secara otomatis:\nnode multi-deploy.js --all-schools"
+    },
+    {
+      "key": "lms-sekolah",
+      "title": "LMS Sekolah GAS",
+      "subtitle": "Sistem Manajemen Pembelajaran Digital Modern",
+      "badge": "E-Learning Hub",
+      "color": "green",
+      "techStack": ["Google Apps Script", "Google Sheets", "HTML5", "Alpine.js (SPA)", "Tailwind CSS", "SweetAlert2", "FontAwesome"],
+      "githubUrl": "https://github.com/arjazq/lms-sekolah-gas",
+      "demoUrl": "lms-sekolah/",
+      "desc": "Learning Management System digital sekolah yang modern, cepat, dan reaktif. Pengelolaan tugas, evaluasi, dan materi belajar terpusat di Google Sheets.",
+      "features": [
+        "Menggunakan pola Single Page Application (SPA) reaktif berkecepatan tinggi dengan Alpine.js.",
+        "Dasbor terpadu menampilkan visualisasi data statistik siswa, kelas, dan tugas aktif secara real-time.",
+        "Manajemen mata pelajaran dengan hak unggah materi digital (PDF, Link, Dokumen).",
+        "Pemantauan dan penilaian pengumpulan tugas/evaluasi siswa langsung dalam satu antarmuka.",
+        "Manajemen akun siswa, guru, dan admin yang dinamis serta fitur ganti kata sandi.",
+        "Desain antarmuka premium yang responsif dengan animasi transisi yang halus."
+      ],
+      "credentials": [
+        { "role": "Akun Administrator", "user": "admin", "pass": "admin123" },
+        { "role": "Akun Guru Pengajar", "user": "guru", "pass": "guru123" },
+        { "role": "Akun Siswa / Pelajar", "user": "siswa", "pass": "siswa123" }
+      ],
+      "setupGuide": "// Langkah 1: Kloning & Buat Proyek Web App\ncd lms-sekolah-gas\nclasp create --title \"LMS Sekolah GAS\" --type webapp\n\n// Langkah 2: Unggah Kode ke Google Apps Script\nclasp push\n\n// Langkah 3: Deploy Aplikasi Web\nclasp open\n// Di Editor GAS, klik Deploy > New Deployment > Web App\n// Konfigurasikan: Execute as: \"Me\", Who has access: \"Anyone\"\n// Salin URL Web App yang dihasilkan.\n\n// Langkah 4: Setup Database Otomatis (Spreadsheet)\n1. Buka Google Spreadsheet yang terikat dengan proyek ini.\n2. Refresh halaman, Anda akan melihat menu baru di atas bernama \"🚀 LMS GAS\".\n3. Klik \"🚀 LMS GAS\" > \"Setup Database\".\n4. Script akan otomatis memformat semua sheet (Users, Courses, dll) beserta akun demo."
+    },
+    {
+      "key": "cbt-arjazq",
+      "title": "CBT System Pro",
+      "subtitle": "Sistem Ujian Computer Based Test Proteksi Exambrowser",
+      "badge": "Ujian Digital",
+      "color": "gold",
+      "techStack": ["Google Apps Script", "Google Sheets", "HTML5", "ExcelJS", "JavaScript", "Android Exambro SDK"],
+      "githubUrl": "https://github.com/arjazq/cbt-arjazq",
+      "demoUrl": "cbt-system/",
+      "desc": "Aplikasi Computer Based Test tangguh dengan integrasi Android Exambrowser, AI Question Generator, import massal Excel, dan otomasi multi-deploy.",
+      "features": [
+        "Pembuat soal pintar terintegrasi serta sistem manajemen bank soal yang komprehensif.",
+        "Fitur Bulk Excel Import (.xlsx) untuk admin, kurikulum, mata pelajaran, dan ribuan soal ujian.",
+        "Sistem multi-deploy otomatis berbasis npsn yang diatur di file 'config/schools.json'.",
+        "Proteksi layar penuh otomatis (Auto-Fullscreen) mendeteksi jika siswa menekan tombol keluar.",
+        "Penghitung pelanggaran otomatis dan sanksi diskualifikasi paksa untuk meminimalisir kecurangan.",
+        "Integrasi QR-Code cepat untuk mempermudah siswa mengakses ujian melalui aplikasi Exambrowser Android."
+      ],
+      "credentials": [
+        { "role": "Akun Administrator Default", "user": "admin", "pass": "cbt123" }
+      ],
+      "setupGuide": "// Langkah 1: Setup Daftar Sekolah (Sekolah Mandiri/Cabang)\n// Edit file 'config/schools.json' untuk mendaftarkan instansi baru:\n{\n  \"npsn\": \"12345678\",\n  \"nama\": \"SMA Antigravity\",\n  \"scriptId\": \"ID_SCRIPT_GOOGLE_APPS_SCRIPT_SEKOLAH\",\n  \"email\": \"admin@sekolah.sch.id\"\n}\n\n// Langkah 2: Deploy Otomatis Menggunakan Node.js\n// Untuk mendeploy naskah ke SEMUA sekolah sekaligus:\nnode deploy.js\n\n// Atau deploy khusus ke SATU target sekolah saja (filter NPSN):\nnode deploy.js 12345678\n\n// Langkah 3: Konfigurasi Keamanan Android (Integritas Ujian)\n1. Buka aplikasi Exambrowser (misalnya Zen Exam Browser) di HP siswa.\n2. Generate QR Code dari URL Web App ujian menggunakan QRCode Monkey.\n3. Siswa cukup melakukan Scan QR Code yang disediakan oleh pengawas ujian.\n4. Aplikasi akan mengunci layar siswa dan langsung membuka halaman login ujian."
+    }
+  ]
+}

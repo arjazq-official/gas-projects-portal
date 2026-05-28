@@ -1,182 +1,128 @@
-// Data lengkap proyek-proyek GAS
-const projectData = {
-  "sca-bos": {
-    title: "SCA-BOS-GAS",
-    subtitle: "Sistem Cetak Administrasi BOS & Perencanaan Keuangan",
-    badge: "Sistem Keuangan",
-    color: "purple",
-    techStack: ["Google Apps Script", "Google Sheets", "HTML5", "Tailwind CSS", "JavaScript", "Telegram API"],
-    githubUrl: "https://github.com/arjazq/sca-bos-gas",
-    demoUrl: "sca-bos/",
-    features: [
-      "Arsitektur Hub & Spoke memisahkan Master Hub (Pusat) dan Spoke (Sekolah) secara otomatis.",
-      "Manajemen Lisensi Terpusat (License Hub) dengan inisialisasi regional Kabupaten NTB.",
-      "Otomatisasi masa berlaku lisensi selama 1 tahun dan validasi ID laptop pengguna.",
-      "Panduan konsultasi Telegram terintegrasi langsung pada halaman login.",
-      "Otomatis menyiapkan struktur spreadsheet dan kolom master lisensi lewat sekali run.",
-      "Sistem multi-deploy massal untuk update instan ke ratusan sekolah client via CLI."
-    ],
-    credentials: [
-      { role: "Master Hub (Pusat)", user: "admin", pass: "master123" },
-      { role: "Sekolah / Client (Spoke)", user: "admin", pass: "123456" }
-    ],
-    setupGuide: `// Langkah 1: Persiapan Lingkungan
-// Pastikan Node.js terinstal, lalu instal clasp & login:
-npm install -g @google/clasp
-clasp login
-
-// Langkah 2: Inisialisasi Master Hub (Pusat)
-// Buka Spreadsheet Master Lisensi Anda, hubungkan dengan clasp dan push folder:
-node multi-deploy.js Master
-
-// Langkah 3: Setup Kolom & Triggers Master
-// Di editor GAS Master, jalankan fungsi:
-1. apiInitMasterSheet  // Menyiapkan susunan kolom
-2. apiInitHubData      // Mengisi data dropdown Kabupaten NTB
-3. installMasterTriggers // Mengaktifkan durasi expired otomatis 1 tahun
-
-// Langkah 4: Hubungkan Sekolah (Client/Spoke)
-// Deploy GAS Master sebagai Web App (Access: Anyone) dan salin URL-nya.
-// Di setiap naskah GAS sekolah, tambahkan Script Property:
-LICENSE_SERVER_URL = "URL_WEB_APP_MASTER_ANDA"
-
-// Langkah 5: Distribusikan Update Massal
-// Jalankan update ke seluruh sekolah terdaftar secara otomatis:
-node multi-deploy.js --all-schools`
-  },
-  "lms-sekolah": {
-    title: "LMS Sekolah GAS",
-    subtitle: "Sistem Manajemen Pembelajaran Digital Modern",
-    badge: "E-Learning Hub",
-    color: "green",
-    techStack: ["Google Apps Script", "Google Sheets", "HTML5", "Alpine.js (SPA)", "Tailwind CSS", "SweetAlert2", "FontAwesome"],
-    githubUrl: "https://github.com/arjazq/lms-sekolah-gas",
-    demoUrl: "lms-sekolah/",
-    features: [
-      "Menggunakan pola Single Page Application (SPA) reaktif berkecepatan tinggi dengan Alpine.js.",
-      "Dasbor terpadu menampilkan visualisasi data statistik siswa, kelas, dan tugas aktif secara real-time.",
-      "Manajemen mata pelajaran dengan hak unggah materi digital (PDF, Link, Dokumen).",
-      "Pemantauan dan penilaian pengumpulan tugas/evaluasi siswa langsung dalam satu antarmuka.",
-      "Manajemen akun siswa, guru, dan admin yang dinamis serta fitur ganti kata sandi.",
-      "Desain antarmuka premium yang responsif dengan animasi transisi yang halus."
-    ],
-    credentials: [
-      { role: "Akun Administrator", user: "admin", pass: "admin123" },
-      { role: "Akun Guru Pengajar", user: "guru", pass: "guru123" },
-      { role: "Akun Siswa / Pelajar", user: "siswa", pass: "siswa123" }
-    ],
-    setupGuide: `// Langkah 1: Kloning & Buat Proyek Web App
-cd lms-sekolah-gas
-clasp create --title "LMS Sekolah GAS" --type webapp
-
-// Langkah 2: Unggah Kode ke Google Apps Script
-clasp push
-
-// Langkah 3: Deploy Aplikasi Web
-clasp open
-// Di Editor GAS, klik Deploy > New Deployment > Web App
-// Konfigurasikan: Execute as: "Me", Who has access: "Anyone"
-// Salin URL Web App yang dihasilkan.
-
-// Langkah 4: Setup Database Otomatis (Spreadsheet)
-1. Buka Google Spreadsheet yang terikat dengan proyek ini.
-2. Refresh halaman, Anda akan melihat menu baru di atas bernama "🚀 LMS GAS".
-3. Klik "🚀 LMS GAS" > "Setup Database".
-4. Script akan otomatis memformat semua sheet (Users, Courses, dll) beserta akun demo.`
-  },
-  "cbt-arjazq": {
-    title: "CBT System Pro",
-    subtitle: "Sistem Ujian Computer Based Test Proteksi Exambrowser",
-    badge: "Ujian Digital",
-    color: "gold",
-    techStack: ["Google Apps Script", "Google Sheets", "HTML5", "ExcelJS", "JavaScript", "Android Exambro SDK"],
-    githubUrl: "https://github.com/arjazq/cbt-arjazq",
-    demoUrl: "cbt-system/",
-    features: [
-      "Pembuat soal pintar terintegrasi serta sistem manajemen bank soal yang komprehensif.",
-      "Fitur Bulk Excel Import (.xlsx) untuk admin, kurikulum, mata pelajaran, dan ribuan soal ujian.",
-      "Sistem multi-deploy otomatis berbasis npsn yang diatur di file 'config/schools.json'.",
-      "Proteksi layar penuh otomatis (Auto-Fullscreen) mendeteksi jika siswa menekan tombol keluar.",
-      "Penghitung pelanggaran otomatis dan sanksi diskualifikasi paksa untuk meminimalisir kecurangan.",
-      "Integrasi QR-Code cepat untuk mempermudah siswa mengakses ujian melalui aplikasi Exambrowser Android."
-    ],
-    credentials: [
-      { role: "Akun Administrator Default", user: "admin", pass: "cbt123" }
-    ],
-    setupGuide: `// Langkah 1: Setup Daftar Sekolah (Sekolah Mandiri/Cabang)
-// Edit file 'config/schools.json' untuk mendaftarkan instansi baru:
-{
-  "npsn": "12345678",
-  "nama": "SMA Antigravity",
-  "scriptId": "ID_SCRIPT_GOOGLE_APPS_SCRIPT_SEKOLAH",
-  "email": "admin@sekolah.sch.id"
-}
-
-// Langkah 2: Deploy Otomatis Menggunakan Node.js
-// Untuk mendeploy naskah ke SEMUA sekolah sekaligus:
-node deploy.js
-
-// Atau deploy khusus ke SATU target sekolah saja (filter NPSN):
-node deploy.js 12345678
-
-// Langkah 3: Konfigurasi Keamanan Android (Integritas Ujian)
-1. Buka aplikasi Exambrowser (misalnya Zen Exam Browser) di HP siswa.
-2. Generate QR Code dari URL Web App ujian menggunakan QRCode Monkey.
-3. Siswa cukup melakukan Scan QR Code yang disediakan oleh pengawas ujian.
-4. Aplikasi akan mengunci layar siswa dan langsung membuka halaman login ujian.`
-  }
-};
-
-// DOM Elements
-const modal = document.getElementById("detail-modal");
-const modalTitle = document.getElementById("modal-title");
-const modalSubtitle = document.getElementById("modal-subtitle");
-const modalBadge = document.getElementById("modal-badge");
-const modalTech = document.getElementById("modal-tech");
-const closeBtn = document.getElementById("modal-close");
-const tabButtons = document.querySelectorAll(".tab-btn");
-const tabPanes = document.querySelectorAll(".tab-pane");
-
-// Active Project Key
+// State data proyek dinamis
+let projectData = {};
 let activeProjectKey = null;
 
-// Open Modal with Data
-function openProjectDetails(key) {
+// DOM Elements
+const elements = {
+  projectsShowcase: document.getElementById("projects-showcase"),
+  modal: document.getElementById("detail-modal"),
+  modalTitle: document.getElementById("modal-title"),
+  modalSubtitle: document.getElementById("modal-subtitle"),
+  modalBadge: document.getElementById("modal-badge"),
+  modalTech: document.getElementById("modal-tech"),
+  closeBtn: document.getElementById("modal-close"),
+  tabButtons: document.querySelectorAll(".tab-btn"),
+  tabPanes: document.querySelectorAll(".tab-pane"),
+  featuresContainer: document.getElementById("features-container"),
+  credentialsBody: document.getElementById("credentials-table-body"),
+  codeBlock: document.getElementById("setup-code-block"),
+  guideLink: document.getElementById("modal-guide-link"),
+  copyGuideBtn: document.getElementById("code-copy-btn")
+};
+
+// Fetch data projects.json secara dinamis
+async function fetchProjects() {
+  try {
+    const response = await fetch("projects.json");
+    const data = await response.json();
+    
+    // Simpan ke state global yang diindeks berdasarkan key untuk pencarian detail modal cepat
+    data.projects.forEach(proj => {
+      projectData[proj.key] = proj;
+    });
+
+    // Render kartu proyek secara dinamis ke grid
+    renderProjectCards(data.projects);
+  } catch (err) {
+    console.error("Gagal mengambil data projects.json: ", err);
+    if (elements.projectsShowcase) {
+      elements.projectsShowcase.innerHTML = `
+        <div class="col-span-full text-center py-10" style="grid-column: 1 / -1;">
+          <i class="fas fa-exclamation-triangle" style="font-size: 2.5rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Gagal Memuat Daftar Proyek</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Pastikan berkas <code>projects.json</code> ada di direktori utama dan memiliki format JSON yang valid.</p>
+        </div>
+      `;
+    }
+  }
+}
+
+// Render kartu-kartu proyek secara dinamis pada grid portal utama
+function renderProjectCards(projects) {
+  if (!elements.projectsShowcase) return;
+  elements.projectsShowcase.innerHTML = "";
+
+  projects.forEach(project => {
+    const card = document.createElement("article");
+    card.className = "project-card";
+    card.setAttribute("data-color", project.color);
+    card.id = `card-${project.key}`;
+
+    // Tampilkan 3 badge stack teknologi pertama sebagai penanda ringkas
+    const techBadges = project.techStack.slice(0, 3).map(tech => 
+      `<span class="badge badge-tech">${tech}</span>`
+    ).join("");
+
+    card.innerHTML = `
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="badge badge-${project.color}">${project.badge}</span>
+          ${techBadges}
+        </div>
+        <h3 class="project-title">${project.title}</h3>
+        <p class="project-desc">${project.desc}</p>
+        <div class="project-footer">
+          <a href="${project.demoUrl}" target="_blank" class="btn btn-primary" style="flex: 1;" id="btn-open-${project.key}">
+            <i class="fas fa-external-link-alt"></i>
+            <span>Buka Demo</span>
+          </a>
+          <button class="btn btn-secondary" style="flex: 1;" id="btn-detail-${project.key}" onclick="openProjectDetails('${project.key}')">
+            <i class="fas fa-info-circle"></i>
+            <span>Detail</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    elements.projectsShowcase.appendChild(card);
+  });
+}
+
+// Buka Dialog Modal Detail Proyek
+window.openProjectDetails = function(key) {
   const data = projectData[key];
   if (!data) return;
 
   activeProjectKey = key;
 
-  // Set Modal Header
-  modalTitle.textContent = data.title;
-  modalSubtitle.textContent = data.subtitle;
-  modalBadge.textContent = data.badge;
+  // Set Identitas Header
+  elements.modalTitle.textContent = data.title;
+  elements.modalSubtitle.textContent = data.subtitle;
+  elements.modalBadge.textContent = data.badge;
 
-  // Reset Badge Color Classes
-  modalBadge.className = "badge";
-  modalBadge.classList.add(`badge-${data.color}`);
+  // Set Warna Badge Kategori
+  elements.modalBadge.className = "badge";
+  elements.modalBadge.classList.add(`badge-${data.color}`);
 
-  // Populate Tech Stack Badges
-  modalTech.innerHTML = "";
+  // Render Daftar Lengkap Teknologi
+  elements.modalTech.innerHTML = "";
   data.techStack.forEach(tech => {
     const badge = document.createElement("span");
     badge.className = "badge badge-tech";
     badge.textContent = tech;
-    modalTech.appendChild(badge);
+    elements.modalTech.appendChild(badge);
   });
 
-  // Populate Features
-  const featuresList = document.getElementById("features-container");
-  featuresList.innerHTML = "";
+  // Render Daftar Fitur Utama
+  elements.featuresContainer.innerHTML = "";
   data.features.forEach(feat => {
     const li = document.createElement("li");
     li.innerHTML = `<i class="fas fa-check-circle"></i> <span>${feat}</span>`;
-    featuresList.appendChild(li);
+    elements.featuresContainer.appendChild(li);
   });
 
-  // Populate Credentials Table
-  const credsBody = document.getElementById("credentials-table-body");
-  credsBody.innerHTML = "";
+  // Render Tabel Akun Uji Kredensial
+  elements.credentialsBody.innerHTML = "";
   data.credentials.forEach(cred => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -194,56 +140,53 @@ function openProjectDetails(key) {
         </div>
       </td>
     `;
-    credsBody.appendChild(tr);
+    elements.credentialsBody.appendChild(tr);
   });
 
-  // Populate Setup Code Block
-  const codeBlock = document.getElementById("setup-code-block");
-  codeBlock.textContent = data.setupGuide;
+  // Render Kode Panduan deploy
+  elements.codeBlock.textContent = data.setupGuide;
 
-  // Set dedicated project guide link
-  document.getElementById("modal-guide-link").href = data.demoUrl + "panduan.html";
+  // Set Tautan Panduan Khusus
+  elements.guideLink.href = data.demoUrl + "panduan.html";
 
-  // Open first tab by default
+  // Tampilkan tab pertama (Features & Tech) secara default
   switchTab("features");
 
-  // Open Modal Native (Handles top layer, ESC key, and backdrop blur)
-  modal.showModal();
-}
+  // Buka modal native HTML dialog
+  elements.modal.showModal();
+};
 
-// Tab Switching Logic
+// Logika Perpindahan Sistem Tab di dalam Modal
 function switchTab(tabId) {
-  tabButtons.forEach(btn => {
+  elements.tabButtons.forEach(btn => {
     btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
   });
 
-  tabPanes.forEach(pane => {
+  elements.tabPanes.forEach(pane => {
     pane.classList.toggle("active", pane.id === `pane-${tabId}`);
   });
 
-  // Load / Clear Iframe dynamically for live demo
+  // Muat iframe demo dinamis saat tab demo dibuka
   const iframe = document.getElementById("modal-demo-iframe");
   if (tabId === "demo" && activeProjectKey) {
     const project = projectData[activeProjectKey];
     if (project && project.demoUrl) {
-      // Avoid reloading if it's already set to the same target
       const targetUrl = project.demoUrl;
       if (!iframe.src.includes(targetUrl)) {
         iframe.src = targetUrl;
       }
     }
   } else {
-    // Clear iframe when switching away to stop scripts from running
+    // Kosongkan src iframe saat pindah tab agar proses/skrip iframe berhenti berjalan di latar
     iframe.src = "";
   }
 }
 
-// Copy Text to Clipboard with visual effect
+// Fungsi menyalin teks ke clipboard dengan umpan balik visual
 async function copyText(text, btnElement) {
   try {
     await navigator.clipboard.writeText(text);
     
-    // Success UI Feedback
     const icon = btnElement.querySelector("i");
     if (icon) {
       icon.className = "fas fa-check text-green";
@@ -259,53 +202,53 @@ async function copyText(text, btnElement) {
   }
 }
 
-// Setup Event Listeners
+// Pasang Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
-  // Card Buttons
-  document.querySelectorAll(".btn-detail").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const projKey = btn.getAttribute("data-project");
-      openProjectDetails(projKey);
+  // Inisialisasi pengambilan data JSON proyek
+  fetchProjects();
+
+  // Tombol Tutup Modal
+  if (elements.closeBtn) {
+    elements.closeBtn.addEventListener("click", () => {
+      document.getElementById("modal-demo-iframe").src = "";
+      elements.modal.close();
     });
-  });
+  }
 
-  // Modal Close Button
-  closeBtn.addEventListener("click", () => {
-    document.getElementById("modal-demo-iframe").src = "";
-    modal.close();
-  });
-
-  // Tab Buttons Click
-  tabButtons.forEach(btn => {
+  // Interaksi Klik Tombol Tab Modal
+  elements.tabButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const tabId = btn.getAttribute("data-tab");
       switchTab(tabId);
     });
   });
 
-  // Setup Code block Copy Button click handler
-  document.getElementById("code-copy-btn").addEventListener("click", function() {
-    const code = document.getElementById("setup-code-block").textContent;
-    copyText(code, this);
-  });
+  // Salin seluruh isi panduan terminal deploy
+  if (elements.copyGuideBtn) {
+    elements.copyGuideBtn.addEventListener("click", function() {
+      const code = elements.codeBlock.textContent;
+      copyText(code, this);
+    });
+  }
 
-  // Click outside Dialog to Close (Detects click on native backdrop overlay)
-  modal.addEventListener("click", (e) => {
-    const dialogDimensions = modal.getBoundingClientRect();
-    if (
-      e.clientX < dialogDimensions.left ||
-      e.clientX > dialogDimensions.right ||
-      e.clientY < dialogDimensions.top ||
-      e.clientY > dialogDimensions.bottom
-    ) {
+  // Klik di area luar modal (backdrop) otomatis menutup modal dialog
+  if (elements.modal) {
+    elements.modal.addEventListener("click", (e) => {
+      const dialogDimensions = elements.modal.getBoundingClientRect();
+      if (
+        e.clientX < dialogDimensions.left ||
+        e.clientX > dialogDimensions.right ||
+        e.clientY < dialogDimensions.top ||
+        e.clientY > dialogDimensions.bottom
+      ) {
+        document.getElementById("modal-demo-iframe").src = "";
+        elements.modal.close();
+      }
+    });
+
+    // Event listener native close (misal menekan tombol ESC)
+    elements.modal.addEventListener("close", () => {
       document.getElementById("modal-demo-iframe").src = "";
-      modal.close();
-    }
-  });
-
-  // Ensure iframe is cleared on ESC key native close
-  modal.addEventListener("close", () => {
-    document.getElementById("modal-demo-iframe").src = "";
-  });
+    });
+  }
 });
