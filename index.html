@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GAS Project Hub - Portofolio Google Apps Script</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Portal portofolio pengembang yang menampilkan kumpulan aplikasi web premium berbasis Google Apps Script terintegrasi Google Workspace karya ArjazQ.">
+  <meta name="keywords" content="Google Apps Script, GAS, Portal, Portofolio, SCA BOS, LMS Sekolah, CBT System, Google Sheets, Vercel, ArjazQ">
+  <meta name="author" content="ArjazQ & Antigravity">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header id="main-header">
+      <div class="logo-section">
+        <div class="logo-icon">G</div>
+        <h2 class="logo-text">GAS Hub</h2>
+        <span class="logo-tag">v1.0</span>
+      </div>
+      <a href="https://github.com/arjazq" target="_blank" rel="noopener noreferrer" class="github-link" id="header-github-btn">
+        <i class="fab fa-github"></i>
+        <span>GitHub Saya</span>
+      </a>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero-section">
+      <div class="hero-badge">
+        <i class="fas fa-rocket"></i>
+        <span>Google Apps Script Premium Portfolio</span>
+      </div>
+      <h1>Google Apps Script<br>Project Showcase</h1>
+      <p>Kumpulan aplikasi web modern, ringan, dan responsif yang terintegrasi secara dinamis dengan Google Sheets dan ekosistem Google Workspace.</p>
+    </section>
+
+    <!-- PROJECTS SHOWCASE GRID -->
+    <main class="projects-grid" id="projects-showcase">
+      
+      <!-- 1. SCA-BOS-GAS -->
+      <article class="project-card" data-color="purple" id="card-sca-bos">
+        <div class="project-img-wrapper">
+          <img src="images/sca-bos-preview.png" alt="SCA-BOS-GAS Dashboard Preview" class="project-img" loading="lazy">
+        </div>
+        <div class="project-body">
+          <div class="project-meta">
+            <span class="badge badge-purple">Sistem Keuangan</span>
+            <span class="badge badge-tech">GAS V8</span>
+            <span class="badge badge-tech">Sheets</span>
+          </div>
+          <h3 class="project-title">SCA-BOS-GAS</h3>
+          <p class="project-desc">Sistem Cetak Administrasi BOS sekolah terintegrasi Spreadsheet. Mempermudah perencanaan anggaran, pencatatan transaksi, kuitansi, dan dokumen dinas.</p>
+          <div class="project-footer">
+            <button class="btn btn-secondary btn-detail" data-project="sca-bos" id="btn-detail-sca-bos">
+              <i class="fas fa-info-circle"></i>
+              <span>Detail & Setup</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. LMS Sekolah GAS -->
+      <article class="project-card" data-color="green" id="card-lms-sekolah">
+        <div class="project-img-wrapper">
+          <img src="images/lms-sekolah-preview.png" alt="LMS Sekolah GAS Dashboard Preview" class="project-img" loading="lazy">
+        </div>
+        <div class="project-body">
+          <div class="project-meta">
+            <span class="badge badge-green">E-Learning Hub</span>
+            <span class="badge badge-tech">Alpine.js SPA</span>
+            <span class="badge badge-tech">Tailwind</span>
+          </div>
+          <h3 class="project-title">LMS Sekolah GAS</h3>
+          <p class="project-desc">Learning Management System digital sekolah yang modern, cepat, dan reaktif. Pengelolaan tugas, evaluasi, dan materi belajar terpusat di Google Sheets.</p>
+          <div class="project-footer">
+            <button class="btn btn-secondary btn-detail" data-project="lms-sekolah" id="btn-detail-lms-sekolah">
+              <i class="fas fa-info-circle"></i>
+              <span>Detail & Setup</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. CBT System Pro (cbt-arjazq) -->
+      <article class="project-card" data-color="gold" id="card-cbt-arjazq">
+        <div class="project-img-wrapper">
+          <img src="images/cbt-arjazq-preview.png" alt="CBT System Pro Dashboard Preview" class="project-img" loading="lazy">
+        </div>
+        <div class="project-body">
+          <div class="project-meta">
+            <span class="badge badge-gold">Ujian Digital</span>
+            <span class="badge badge-tech">ExcelJS</span>
+            <span class="badge badge-tech">Exambro</span>
+          </div>
+          <h3 class="project-title">CBT System Pro</h3>
+          <p class="project-desc">Aplikasi Computer Based Test tangguh dengan integrasi Android Exambrowser, AI Question Generator, import massal Excel, dan otomasi multi-deploy.</p>
+          <div class="project-footer">
+            <button class="btn btn-secondary btn-detail" data-project="cbt-arjazq" id="btn-detail-cbt-arjazq">
+              <i class="fas fa-info-circle"></i>
+              <span>Detail & Setup</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- GETTING STARTED GUIDE -->
+    <section class="getting-started" id="getting-started-section">
+      <h2><i class="fas fa-graduation-cap"></i> Cara Cepat Memulai</h2>
+      <div class="steps-container">
+        
+        <div class="step-card" id="step-clasp">
+          <div class="step-num">1</div>
+          <div>
+            <h3 class="step-title">Instal Clasp CLI</h3>
+            <p class="step-desc">Gunakan Google clasp untuk mengelola file skrip lokal. Jalankan <code>npm install -g @google/clasp</code> di terminal Anda.</p>
+          </div>
+        </div>
+        
+        <div class="step-card" id="step-login">
+          <div class="step-num">2</div>
+          <div>
+            <h3 class="step-title">Login Akun Google</h3>
+            <p class="step-desc">Hubungkan terminal Anda dengan akun Google Workspace yang memiliki akses ke Apps Script dengan perintah <code>clasp login</code>.</p>
+          </div>
+        </div>
+        
+        <div class="step-card" id="step-deploy">
+          <div class="step-num">3</div>
+          <div>
+            <h3 class="step-title">Otomatis Deploy</h3>
+            <p class="step-desc">Gunakan file deploy bawaan (seperti <code>deploy.js</code> atau <code>multi-deploy.js</code>) untuk membagikan kode ke skrip target.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="main-footer">
+      <div class="footer-text">
+        © 2026 Portofolio GAS ArjazQ. Dikembangkan bersama <a href="#" onclick="return false;">Antigravity AI</a>.
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/arjazq" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://vercel.com" target="_blank" rel="noopener noreferrer"><i class="fas fa-cloud"></i> Vercel</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- INTERACTIVE DETAILS MODAL (NATIVE DIALOG) -->
+  <dialog id="detail-modal" aria-labelledby="modal-title">
+    
+    <div class="modal-header">
+      <div class="modal-title-wrapper">
+        <span id="modal-badge" class="badge">Kategori</span>
+        <div>
+          <h3 id="modal-title" style="font-size: 1.4rem; font-weight: 800; line-height: 1.2;">Nama Proyek</h3>
+          <p id="modal-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">Deskripsi singkat proyek</p>
+        </div>
+      </div>
+      <button class="modal-close" id="modal-close" aria-label="Tutup Dialog">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      
+      <!-- Tab Navigation -->
+      <nav class="modal-tabs" aria-label="Menu navigasi detail proyek">
+        <button class="tab-btn active" data-tab="features" id="tab-btn-features"><i class="fas fa-star"></i> Fitur & Tech</button>
+        <button class="tab-btn" data-tab="credentials" id="tab-btn-credentials"><i class="fas fa-key"></i> Kredensial Demo</button>
+        <button class="tab-btn" data-tab="setup" id="tab-btn-setup"><i class="fas fa-code"></i> Panduan Deploy</button>
+      </nav>
+      
+      <!-- Pane 1: Features & Tech -->
+      <div class="tab-pane active" id="pane-features">
+        <div class="content-section">
+          <h4><i class="fas fa-laptop-code text-blue"></i> Deskripsi & Fitur Utama</h4>
+          <p>Aplikasi web terintegrasi Google Workspace dengan performa cepat dan arsitektur kode bersih.</p>
+          <ul class="features-list" id="features-container">
+            <!-- Dinamis via JS -->
+          </ul>
+        </div>
+        <div class="content-section" style="margin-top: 1.5rem;">
+          <h4><i class="fas fa-cubes text-blue"></i> Teknologi Utama</h4>
+          <div id="modal-tech" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+            <!-- Dinamis via JS -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pane 2: Credentials -->
+      <div class="tab-pane" id="pane-credentials">
+        <div class="content-section">
+          <h4><i class="fas fa-shield-alt text-blue"></i> Data Akses Demo</h4>
+          <p>Berikut adalah akun default hasil inisialisasi basis data (sheet) untuk melakukan pengujian lokal atau demonstrasi.</p>
+          
+          <table class="credentials-table">
+            <thead>
+              <tr>
+                <th>Hak Akses / Peran</th>
+                <th>Username / Email</th>
+                <th>Password Default</th>
+              </tr>
+            </thead>
+            <tbody id="credentials-table-body">
+              <!-- Dinamis via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Pane 3: Setup & Deploy -->
+      <div class="tab-pane" id="pane-setup">
+        <div class="content-section">
+          <h4><i class="fas fa-terminal text-blue"></i> Panduan Deployment</h4>
+          <p>Gunakan perintah terminal berikut di direktori proyek lokal Anda untuk melakukan build dan push menggunakan Clasp CLI.</p>
+          
+          <div class="code-header">
+            <span>TERMINAL COMMANDS</span>
+            <button class="code-copy-btn" id="code-copy-btn" title="Salin seluruh panduan"><i class="far fa-copy"></i> Salin Semua</button>
+          </div>
+          <pre><code id="setup-code-block">
+            <!-- Dinamis via JS -->
+          </code></pre>
+        </div>
+      </div>
+
+    </div>
+
+  </dialog>
+
+  <!-- Interactive JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
