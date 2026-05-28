@@ -1,0 +1,25 @@
+{
+  "topic": "Template Panduan Proyek GAS",
+  "chapters": [
+    {
+      "id": "ch-intro",
+      "title": "1. Contoh Teks, Heading, dan List",
+      "content": "### 📚 Panduan Heading dan Paragraf\n\nGunakan tanda pagar (`###`) untuk membuat sub-judul bab. Gunakan baris kosong baru (`\\n\\n`) untuk memisahkan antar paragraf agar teks tampak rapi dan mudah dibaca.\n\nTeks biasa dapat memiliki format **tebal (bold)** dengan menggunakan dua tanda bintang di awal dan akhir kata, atau *miring (italic)* menggunakan satu tanda bintang.\n\n---\n\n### 📝 Contoh Daftar (List)\n\n#### A. Daftar Tidak Terurut (Unordered List)\n* Ini adalah item daftar pertama.\n* Ini adalah item daftar kedua.\n* Ini adalah item daftar ketiga.\n\n#### B. Daftar Terurut Langkah demi Langkah (Ordered List)\n1. **Langkah 1**: Hubungkan spreadsheet Anda dengan Apps Script editor.\n2. **Langkah 2**: Klik ikon deploy di sudut kanan atas.\n3. **Langkah 3**: Simpan alamat Web App yang dihasilkan."
+    },
+    {
+      "id": "ch-code",
+      "title": "2. Contoh Blok Kode & Sintaksis",
+      "content": "### 💻 Menampilkan Perintah & Kode Sumber\n\nUntuk menampilkan perintah terminal atau potongan kode JavaScript/JSON, apit teks menggunakan tiga tanda backtick (\\`\\`\\`).\n\n#### A. Contoh Kode Perintah Terminal (Bash)\n```bash\nnpm install -g @google/clasp\nclasp login\n```\n\n#### B. Contoh Potongan Kode Program (JavaScript)\n```javascript\nfunction doGet(e) {\n  return HtmlService.createHtmlOutputFromFile('index')\n      .setTitle('GAS App')\n      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);\n}\n```\n\n#### C. Contoh Teks Kode Sebaris (Inline Code)\nUntuk merujuk variabel atau file di tengah kalimat, gunakan tanda backtick tunggal. Contohnya, file konfigurasi disimpan pada `appsscript.json` dengan properti `timeZone` bernilai `Asia/Jakarta`."
+    },
+    {
+      "id": "ch-quotes",
+      "title": "3. Contoh Kutipan & Informasi Penting",
+      "content": "### 💡 Menampilkan Catatan & Kutipan (Blockquote)\n\nAnda dapat menambahkan catatan khusus, peringatan, atau petunjuk penting dengan menggunakan tanda lebih besar dari (`> `) di awal baris. Ini akan dirender dengan garis pembatas abu-abu di sisi kiri bergaya elegan.\n\n> **⚠️ PERINGATAN PENTING**\n> Pastikan Anda telah mengaktifkan **Google Apps Script API** di Google Akun Anda terlebih dahulu sebelum menjalankan clasp, jika tidak, proses deployment akan mengalami penolakan akses (Error 403).\n\n> **💡 TIPS PRODUKTIVITAS**\n> Selalu gunakan Google Chrome atau browser berbasis Chromium saat melakukan pengujian antarmuka portal agar fitur modal dialog dapat beroperasi secara optimal."
+    },
+    {
+      "id": "ch-finish",
+      "title": "4. Contoh Halaman Penutup",
+      "content": "### 🎓 Panduan Selesai!\n\nTemplate ini berisi contoh-contoh visual lengkap yang didukung oleh struktur CSS `.prose` pada halaman panduan Anda.\n\nSilakan hapus atau ubah isi data JSON ini sesuai dengan petunjuk teknis sesungguhnya dari aplikasi yang Anda buat."
+    }
+  ]
+}
