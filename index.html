@@ -65,9 +65,13 @@
           <h3 class="project-title">SCA-BOS-GAS</h3>
           <p class="project-desc">Sistem Cetak Administrasi BOS sekolah terintegrasi Spreadsheet. Mempermudah perencanaan anggaran, pencatatan transaksi, kuitansi, dan dokumen dinas.</p>
           <div class="project-footer">
-            <button class="btn btn-secondary btn-detail" data-project="sca-bos" id="btn-detail-sca-bos">
+            <a href="sca-bos/" target="_blank" class="btn btn-primary" style="flex: 1;" id="btn-open-sca-bos">
+              <i class="fas fa-external-link-alt"></i>
+              <span>Buka Demo</span>
+            </a>
+            <button class="btn btn-secondary btn-detail" data-project="sca-bos" style="flex: 1;" id="btn-detail-sca-bos">
               <i class="fas fa-info-circle"></i>
-              <span>Detail & Setup</span>
+              <span>Detail</span>
             </button>
           </div>
         </div>
@@ -87,9 +91,13 @@
           <h3 class="project-title">LMS Sekolah GAS</h3>
           <p class="project-desc">Learning Management System digital sekolah yang modern, cepat, dan reaktif. Pengelolaan tugas, evaluasi, dan materi belajar terpusat di Google Sheets.</p>
           <div class="project-footer">
-            <button class="btn btn-secondary btn-detail" data-project="lms-sekolah" id="btn-detail-lms-sekolah">
+            <a href="lms-sekolah/" target="_blank" class="btn btn-primary" style="flex: 1;" id="btn-open-lms-sekolah">
+              <i class="fas fa-external-link-alt"></i>
+              <span>Buka Demo</span>
+            </a>
+            <button class="btn btn-secondary btn-detail" data-project="lms-sekolah" style="flex: 1;" id="btn-detail-lms-sekolah">
               <i class="fas fa-info-circle"></i>
-              <span>Detail & Setup</span>
+              <span>Detail</span>
             </button>
           </div>
         </div>
@@ -109,9 +117,13 @@
           <h3 class="project-title">CBT System Pro</h3>
           <p class="project-desc">Aplikasi Computer Based Test tangguh dengan integrasi Android Exambrowser, AI Question Generator, import massal Excel, dan otomasi multi-deploy.</p>
           <div class="project-footer">
-            <button class="btn btn-secondary btn-detail" data-project="cbt-arjazq" id="btn-detail-cbt-arjazq">
+            <a href="cbt-system/" target="_blank" class="btn btn-primary" style="flex: 1;" id="btn-open-cbt-arjazq">
+              <i class="fas fa-external-link-alt"></i>
+              <span>Buka Demo</span>
+            </a>
+            <button class="btn btn-secondary btn-detail" data-project="cbt-arjazq" style="flex: 1;" id="btn-detail-cbt-arjazq">
               <i class="fas fa-info-circle"></i>
-              <span>Detail & Setup</span>
+              <span>Detail</span>
             </button>
           </div>
         </div>
@@ -187,6 +199,7 @@
         <button class="tab-btn active" data-tab="features" id="tab-btn-features"><i class="fas fa-star"></i> Fitur & Tech</button>
         <button class="tab-btn" data-tab="credentials" id="tab-btn-credentials"><i class="fas fa-key"></i> Kredensial Demo</button>
         <button class="tab-btn" data-tab="setup" id="tab-btn-setup"><i class="fas fa-code"></i> Panduan Deploy</button>
+        <button class="tab-btn" data-tab="demo" id="tab-btn-demo"><i class="fas fa-play-circle"></i> Demo Langsung</button>
       </nav>
       
       <!-- Pane 1: Features & Tech -->
@@ -241,6 +254,12 @@
             <!-- Dinamis via JS -->
           </code></pre>
         </div>
+      </div>
+      
+      <!-- Pane 4: Live Demo (Iframe) -->
+      <div class="tab-pane" id="pane-demo" style="height: 55vh; padding: 0;">
+        <!-- Iframe dimuat secara dinamis via JS agar muatan halaman awal tetap super kencang -->
+        <iframe id="modal-demo-iframe" src="" style="width: 100%; height: 100%; border: none;" allow="fullscreen; camera; microphone; display-capture; geolocation;"></iframe>
       </div>
 
     </div>

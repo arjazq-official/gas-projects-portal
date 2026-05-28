@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Hub - Lisensi SCA-BOS-GAS</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/e/ec/Lambang_Kabupaten_Sumbawa.png">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #0b0f19;
+      overflow: hidden;
+    }
+    .iframe-container {
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+    }
+    iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="iframe-container">
+    <!-- GANTI 'src' di bawah dengan URL Web App (exec) hasil deploy GAS Master Hub Anda -->
+    <iframe id="app" 
+      src="https://script.google.com/macros/s/AKfycbz_SCA_BOS_MASTER_PLACEHOLDER/exec" 
+      scrolling="yes" 
+      allowfullscreen="true" 
+      webkitallowfullscreen="true"
+      mozallowfullscreen="true" 
+      allow="fullscreen; camera; microphone; display-capture; geolocation;">
+    </iframe>
+  </div>
+</body>
+</html>

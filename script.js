@@ -7,6 +7,7 @@ const projectData = {
     color: "purple",
     techStack: ["Google Apps Script", "Google Sheets", "HTML5", "Tailwind CSS", "JavaScript", "Telegram API"],
     githubUrl: "https://github.com/arjazq/sca-bos-gas",
+    demoUrl: "sca-bos/",
     features: [
       "Arsitektur Hub & Spoke memisahkan Master Hub (Pusat) dan Spoke (Sekolah) secara otomatis.",
       "Manajemen Lisensi Terpusat (License Hub) dengan inisialisasi regional Kabupaten NTB.",
@@ -50,6 +51,7 @@ node multi-deploy.js --all-schools`
     color: "green",
     techStack: ["Google Apps Script", "Google Sheets", "HTML5", "Alpine.js (SPA)", "Tailwind CSS", "SweetAlert2", "FontAwesome"],
     githubUrl: "https://github.com/arjazq/lms-sekolah-gas",
+    demoUrl: "lms-sekolah/",
     features: [
       "Menggunakan pola Single Page Application (SPA) reaktif berkecepatan tinggi dengan Alpine.js.",
       "Dasbor terpadu menampilkan visualisasi data statistik siswa, kelas, dan tugas aktif secara real-time.",
@@ -89,6 +91,7 @@ clasp open
     color: "gold",
     techStack: ["Google Apps Script", "Google Sheets", "HTML5", "ExcelJS", "JavaScript", "Android Exambro SDK"],
     githubUrl: "https://github.com/arjazq/cbt-arjazq",
+    demoUrl: "cbt-system/",
     features: [
       "Pembuat soal pintar terintegrasi serta sistem manajemen bank soal yang komprehensif.",
       "Fitur Bulk Excel Import (.xlsx) untuk admin, kurikulum, mata pelajaran, dan ribuan soal ujian.",
@@ -214,6 +217,22 @@ function switchTab(tabId) {
   tabPanes.forEach(pane => {
     pane.classList.toggle("active", pane.id === `pane-${tabId}`);
   });
+
+  // Load / Clear Iframe dynamically for live demo
+  const iframe = document.getElementById("modal-demo-iframe");
+  if (tabId === "demo" && activeProjectKey) {
+    const project = projectData[activeProjectKey];
+    if (project && project.demoUrl) {
+      // Avoid reloading if it's already set to the same target
+      const targetUrl = project.demoUrl;
+      if (!iframe.src.includes(targetUrl)) {
+        iframe.src = targetUrl;
+      }
+    }
+  } else {
+    // Clear iframe when switching away to stop scripts from running
+    iframe.src = "";
+  }
 }
 
 // Copy Text to Clipboard with visual effect
@@ -250,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Modal Close Button
   closeBtn.addEventListener("click", () => {
+    document.getElementById("modal-demo-iframe").src = "";
     modal.close();
   });
 
@@ -276,7 +296,13 @@ document.addEventListener("DOMContentLoaded", () => {
       e.clientY < dialogDimensions.top ||
       e.clientY > dialogDimensions.bottom
     ) {
+      document.getElementById("modal-demo-iframe").src = "";
       modal.close();
     }
+  });
+
+  // Ensure iframe is cleared on ESC key native close
+  modal.addEventListener("close", () => {
+    document.getElementById("modal-demo-iframe").src = "";
   });
 });
