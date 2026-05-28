@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Project Generator - Pembuat Berkas projects.json</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Alat generator dinamis untuk menambah, menghapus, dan mengedit data proyek Google Apps Script pada projects.json secara interaktif.">
+  <meta name="keywords" content="JSON Generator, Project Builder, Google Apps Script, Portal">
+  <meta name="author" content="ArjazQ & Antigravity">
+
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- CSS Utama Portal untuk rendering Live Preview Card asli -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* Reset gaya tabrakan Tailwind & Portal */
+    body {
+      background-color: #0f172a !important; /* bg-slate-900 */
+      color: #f8fafc !important;
+      font-family: 'Inter', sans-serif;
+    }
+    .editor-container input, .editor-container select, .editor-container textarea {
+      background-color: #020617;
+      border: 1px solid #334155;
+      color: #fff;
+    }
+    .editor-container input:focus, .editor-container select:focus, .editor-container textarea:focus {
+      border-color: #6366f1;
+      outline: none;
+    }
+    /* Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    
+    <!-- HEADER -->
+    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-800" id="generator-header">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-1 bg-indigo-500/20 text-indigo-400 rounded-lg text-xs font-bold uppercase tracking-wider">Database Tool</span>
+          <h1 class="text-2xl font-extrabold text-white">Portal Project Generator</h1>
+        </div>
+        <p class="text-slate-400 text-sm">Kelola daftar proyek Google Apps Script Anda. Edit data yang sudah ada, tambah proyek baru, dan unduh berkas <code>projects.json</code>.</p>
+      </div>
+      <div class="flex gap-2">
+        <a href="generator.html" class="flex items-center gap-2 px-4 py-2.5 bg-slate-800 text-slate-200 font-bold rounded-xl border border-slate-700 hover:bg-slate-700 hover:text-white transition-all text-xs">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          Generator Panduan
+        </a>
+        <a href="index.html" class="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all text-xs" id="back-to-portal-btn">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          Kembali ke Portal
+        </a>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- EDITOR FORM CONTAINER (Kiri) -->
+      <section class="lg:col-span-7 space-y-6 editor-container" aria-label="Editor Form Proyek">
+        
+        <!-- Selektor Proyek Aktif -->
+        <div class="bg-slate-800/80 border border-slate-700/80 p-5 rounded-3xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div class="flex-grow w-full">
+            <label for="select-active-project" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Pilih Proyek untuk Diedit</label>
+            <select id="select-active-project" class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none">
+              <!-- Pilihan proyek dimuat dari projects.json -->
+            </select>
+          </div>
+          <button id="btn-new-project" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all whitespace-nowrap">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Tambah Proyek Baru
+          </button>
+        </div>
+
+        <!-- Editor Form Data Proyek -->
+        <div id="project-form" class="bg-slate-800/50 border border-slate-700/60 p-6 rounded-3xl space-y-6 hidden">
+          <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="edit-3" class="w-5 h-5 text-indigo-400"></i>
+              Formulir Proyek: <span id="form-project-title" class="text-indigo-300">Detail</span>
+            </h2>
+            <button id="btn-delete-project" class="flex items-center gap-1 text-slate-500 hover:text-rose-400 text-xs font-bold transition-all px-2.5 py-1.5 rounded-lg hover:bg-rose-500/10">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              Hapus Proyek Ini
+            </button>
+          </div>
+
+          <!-- Bagian A: Informasi Utama -->
+          <div class="space-y-4">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider border-l-2 border-indigo-500 pl-2">A. Informasi Utama</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="input-key" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">ID Unik (Key)</label>
+                <input type="text" id="input-key" class="w-full rounded-lg px-3 py-2 text-xs" placeholder="Contoh: sppd-gas">
+              </div>
+              <div>
+                <label for="input-title" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nama Aplikasi / Proyek</label>
+                <input type="text" id="input-title" class="w-full rounded-lg px-3 py-2 text-xs" placeholder="Contoh: SPPD GAS">
+              </div>
+            </div>
+
+            <div>
+              <label for="input-subtitle" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Sub-judul Penjelas</label>
+              <input type="text" id="input-subtitle" class="w-full rounded-lg px-3 py-2 text-xs" placeholder="Contoh: Sistem Administrasi Perjalanan Dinas Sekolah">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label for="input-badge" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Label Kategori</label>
+                <input type="text" id="input-badge" class="w-full rounded-lg px-3 py-2 text-xs" placeholder="Contoh: Administrasi">
+              </div>
+              <div>
+                <label for="input-color" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Warna Tema</label>
+                <select id="input-color" class="w-full rounded-lg px-3 py-2 text-xs">
+                  <option value="purple">Ungu (Purple)</option>
+                  <option value="green">Hijau (Green)</option>
+                  <option value="gold">Emas (Gold)</option>
+                </select>
+              </div>
+              <div>
+                <label for="input-demourl" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nama Folder Proyek (demoUrl)</label>
+                <input type="text" id="input-demourl" class="w-full rounded-lg px-3 py-2 text-xs" placeholder="Contoh: sppd-sistem/">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="input-githuburl" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tautan GitHub</label>
+                <input type="text" id="input-githuburl" class="w-full rounded-lg px-3 py-2 text-xs" placeholder="Contoh: https://github.com/arjazq/...">
+              </div>
+              <div>
+                <label for="input-techstack" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Teknologi Utama (Pisahkan koma)</label>
+                <input type="text" id="input-techstack" class="w-full rounded-lg px-3 py-2 text-xs" placeholder="Contoh: Google Apps Script, Google Sheets, HTML5">
+              </div>
+            </div>
+
+            <div>
+              <label for="input-desc" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Deskripsi Ringkas Kartu</label>
+              <textarea id="input-desc" rows="3" class="w-full rounded-lg px-3 py-2 text-xs custom-scrollbar" placeholder="Ketik keterangan singkat proyek untuk ditampilkan di halaman utama portal..."></textarea>
+            </div>
+          </div>
+
+          <!-- Bagian B: Fitur Utama -->
+          <div class="space-y-4">
+            <div class="flex justify-between items-center border-l-2 border-indigo-500 pl-2">
+              <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">B. Daftar Fitur Utama</h3>
+              <button id="btn-add-feature" class="flex items-center gap-1 px-2.5 py-1 bg-slate-900 border border-slate-700 hover:bg-slate-700 rounded text-[10px] font-bold text-indigo-400">
+                <i data-lucide="plus" class="w-3 h-3"></i> Tambah Fitur
+              </button>
+            </div>
+            <div id="features-form-list" class="space-y-2">
+              <!-- Item fitur dinamis -->
+            </div>
+          </div>
+
+          <!-- Bagian C: Kredensial Uji Akses -->
+          <div class="space-y-4">
+            <div class="flex justify-between items-center border-l-2 border-indigo-500 pl-2">
+              <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">C. Kredensial Akses Demo</h3>
+              <button id="btn-add-cred" class="flex items-center gap-1 px-2.5 py-1 bg-slate-900 border border-slate-700 hover:bg-slate-700 rounded text-[10px] font-bold text-indigo-400">
+                <i data-lucide="plus" class="w-3 h-3"></i> Tambah Akun
+              </button>
+            </div>
+            <div id="credentials-form-list" class="space-y-2">
+              <!-- Baris kredensial dinamis -->
+            </div>
+          </div>
+
+          <!-- Bagian D: Panduan CLI Setup -->
+          <div class="space-y-4">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider border-l-2 border-indigo-500 pl-2">D. Kode Instruksi Deploy (Terminal CLI)</h3>
+            <div>
+              <label for="input-setupguide" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Skrip Perintah Deploy</label>
+              <textarea id="input-setupguide" rows="8" class="w-full rounded-lg px-3 py-2 text-xs font-mono text-indigo-300 custom-scrollbar" placeholder="// Langkah 1: Kloning proyek..."></textarea>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- PREVIEW & CODE OUTPUT CONTAINER (Kanan) -->
+      <section class="lg:col-span-5 space-y-6" aria-label="Visual Preview dan Kode JSON">
+        
+        <!-- Tab Navigation (Pratinjau Kartu / Teks JSON) -->
+        <div class="bg-slate-800/50 border border-slate-700/80 rounded-3xl overflow-hidden flex flex-col min-h-[75vh]">
+          
+          <div class="flex border-b border-slate-700 bg-slate-800/80 px-4 pt-4 justify-between items-center">
+            <nav class="flex gap-2" aria-label="Menu Output">
+              <button id="tab-card-btn" class="px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-indigo-500 bg-slate-950 text-indigo-400">
+                Pratinjau Kartu Utama
+              </button>
+              <button id="tab-rawjson-btn" class="px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+                Berkas projects.json
+              </button>
+            </nav>
+            
+            <div class="flex gap-2 pb-2">
+              <button id="copy-json-btn" class="flex items-center gap-1 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs font-bold rounded-lg border border-slate-600 transition-all text-slate-200">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                Salin JSON
+              </button>
+              <button id="download-json-btn" class="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                Unduh JSON
+              </button>
+            </div>
+          </div>
+
+          <!-- Panel Konten -->
+          <div class="p-6 flex-grow flex flex-col bg-slate-950">
+            
+            <!-- Pane 1: Live Card Preview (Gaya Asli Portal) -->
+            <div id="pane-card-preview" class="space-y-6 flex-grow flex flex-col justify-center">
+              <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 text-center">Live Preview Card (Gaya Portal Minimalis)</h3>
+              
+              <!-- Container Render Kartu Asli -->
+              <div id="preview-card-container" class="max-w-[360px] mx-auto w-full">
+                <!-- Kartu dinamis akan dirender di sini menggunakan styles.css asli -->
+              </div>
+            </div>
+
+            <!-- Pane 2: Raw JSON String -->
+            <div id="pane-rawjson" class="hidden flex-grow flex flex-col">
+              <pre class="bg-slate-900 border border-slate-800 text-indigo-300 p-4 rounded-xl font-mono text-xs overflow-auto flex-grow max-h-[60vh] custom-scrollbar select-all" id="json-output-text">
+                <!-- String JSON hasil edit akan otomatis ter-update di sini -->
+              </pre>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+  <script>
+    // State Global
+    let dbState = { projects: [] };
+    let activeIndex = 0;
+    let activeTab = 'card';
+
+    // DOM Elements
+    const elements = {
+      selectProject: document.getElementById('select-active-project'),
+      btnNewProject: document.getElementById('btn-new-project'),
+      projectForm: document.getElementById('project-form'),
+      formTitle: document.getElementById('form-project-title'),
+      btnDeleteProject: document.getElementById('btn-delete-project'),
+      
+      // Inputs
+      inputKey: document.getElementById('input-key'),
+      inputTitle: document.getElementById('input-title'),
+      inputSubtitle: document.getElementById('input-subtitle'),
+      inputBadge: document.getElementById('input-badge'),
+      inputColor: document.getElementById('input-color'),
+      inputDemoUrl: document.getElementById('input-demourl'),
+      inputGithubUrl: document.getElementById('input-githuburl'),
+      inputTechStack: document.getElementById('input-techstack'),
+      inputDesc: document.getElementById('input-desc'),
+      inputSetupGuide: document.getElementById('input-setupguide'),
+      
+      // Dynamic lists
+      featuresList: document.getElementById('features-form-list'),
+      btnAddFeature: document.getElementById('btn-add-feature'),
+      credentialsList: document.getElementById('credentials-form-list'),
+      btnAddCred: document.getElementById('btn-add-cred'),
+      
+      // Tabs
+      tabCardBtn: document.getElementById('tab-card-btn'),
+      tabRawjsonBtn: document.getElementById('tab-rawjson-btn'),
+      paneCardPreview: document.getElementById('pane-card-preview'),
+      paneRawjson: document.getElementById('pane-rawjson'),
+      
+      // Output
+      previewCardBox: document.getElementById('preview-card-container'),
+      jsonOutput: document.getElementById('json-output-text'),
+      copyBtn: document.getElementById('copy-json-btn'),
+      downloadBtn: document.getElementById('download-json-btn')
+    };
+
+    // Load Existing projects.json at Start
+    async function loadInitialData() {
+      try {
+        const response = await fetch('projects.json');
+        dbState = await response.json();
+        
+        if (!dbState.projects || dbState.projects.length === 0) {
+          initDefaultProject();
+        }
+        
+        populateProjectSelect();
+        selectProject(0);
+      } catch (err) {
+        console.warn("Belum ada projects.json di direktori, menginisialisasi dengan data default.", err);
+        initDefaultProject();
+        populateProjectSelect();
+        selectProject(0);
+      }
+    }
+
+    function initDefaultProject() {
+      dbState = {
+        projects: [
+          {
+            key: "sca-bos",
+            title: "SCA-BOS-GAS",
+            subtitle: "Sistem Cetak Administrasi BOS & Perencanaan Keuangan",
+            badge: "Sistem Keuangan",
+            color: "purple",
+            techStack: ["Google Apps Script", "Google Sheets", "HTML5"],
+            githubUrl: "https://github.com/arjazq/sca-bos-gas",
+            demoUrl: "sca-bos/",
+            desc: "Sistem Cetak Administrasi BOS sekolah terintegrasi Spreadsheet.",
+            features: ["Arsitektur Hub & Spoke otomatis."],
+            credentials: [{ role: "Admin", user: "admin", pass: "123456" }],
+            setupGuide: "// Langkah 1: Deploy..."
+          }
+        ]
+      };
+    }
+
+    // Populate Select Options dropdown
+    function populateProjectSelect() {
+      elements.selectProject.innerHTML = '';
+      dbState.projects.forEach((proj, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = proj.title || `Proyek #${idx + 1}`;
+        elements.selectProject.appendChild(opt);
+      });
+      elements.selectProject.value = activeIndex;
+    }
+
+    // Select Project to Edit
+    function selectProject(idx) {
+      if (idx < 0 || idx >= dbState.projects.length) return;
+      activeIndex = idx;
+      const proj = dbState.projects[idx];
+      
+      elements.projectForm.classList.remove('hidden');
+      elements.formTitle.textContent = proj.title || "Detail";
+      
+      // Populate fields
+      elements.inputKey.value = proj.key || '';
+      elements.inputTitle.value = proj.title || '';
+      elements.inputSubtitle.value = proj.subtitle || '';
+      elements.inputBadge.value = proj.badge || '';
+      elements.inputColor.value = proj.color || 'purple';
+      elements.inputDemoUrl.value = proj.demoUrl || '';
+      elements.inputGithubUrl.value = proj.githubUrl || '';
+      elements.inputTechStack.value = (proj.techStack || []).join(', ');
+      elements.inputDesc.value = proj.desc || '';
+      elements.inputSetupGuide.value = proj.setupGuide || '';
+      
+      // Render sub-lists
+      renderFeaturesForm(proj.features || []);
+      renderCredentialsForm(proj.credentials || []);
+      
+      updatePreview();
+      updateJSONOutput();
+    }
+
+    // Event change select project
+    elements.selectProject.addEventListener('change', (e) => {
+      selectProject(parseInt(e.target.value));
+    });
+
+    // Add New Project Button
+    elements.btnNewProject.addEventListener('click', () => {
+      const newProj = {
+        key: `proyek-baru-${dbState.projects.length + 1}`,
+        title: "Aplikasi Google Apps Script Baru",
+        subtitle: "Sub-judul Penjelas Aplikasi",
+        badge: "Kategori",
+        color: "purple",
+        techStack: ["Google Apps Script", "Google Sheets"],
+        githubUrl: "",
+        demoUrl: "proyek-baru/",
+        desc: "Deskripsi ringkas mengenai aplikasi baru Anda untuk dipajang di halaman utama portal.",
+        features: ["Fitur Utama 1"],
+        credentials: [{ role: "Administrator", user: "admin", pass: "admin123" }],
+        setupGuide: "// Langkah 1: Kloning repositori..."
+      };
+      
+      dbState.projects.push(newProj);
+      activeIndex = dbState.projects.length - 1;
+      populateProjectSelect();
+      selectProject(activeIndex);
+    });
+
+    // Delete Active Project Button
+    elements.btnDeleteProject.addEventListener('click', () => {
+      if (dbState.projects.length <= 1) {
+        alert("Portal harus menampilkan minimal 1 proyek.");
+        return;
+      }
+      if (confirm(`Apakah Anda yakin ingin menghapus proyek "${dbState.projects[activeIndex].title}" dari portal?`)) {
+        dbState.projects.splice(activeIndex, 1);
+        activeIndex = 0;
+        populateProjectSelect();
+        selectProject(activeIndex);
+      }
+    });
+
+    // Event listeners inputs (Live updates)
+    const liveFields = [
+      { input: elements.inputKey, field: 'key' },
+      { input: elements.inputTitle, field: 'title' },
+      { input: elements.inputSubtitle, field: 'subtitle' },
+      { input: elements.inputBadge, field: 'badge' },
+      { input: elements.inputColor, field: 'color' },
+      { input: elements.inputDemoUrl, field: 'demoUrl' },
+      { input: elements.inputGithubUrl, field: 'githubUrl' },
+      { input: elements.inputDesc, field: 'desc' },
+      { input: elements.inputSetupGuide, field: 'setupGuide' }
+    ];
+
+    liveFields.forEach(item => {
+      item.input.addEventListener('input', (e) => {
+        dbState.projects[activeIndex][item.field] = e.target.value;
+        if (item.field === 'title') {
+          elements.formTitle.textContent = e.target.value;
+          // Update option text dynamically
+          elements.selectProject.options[activeIndex].textContent = e.target.value;
+        }
+        updatePreview();
+        updateJSONOutput();
+      });
+    });
+
+    // Color drop-down update needs 'change' event
+    elements.inputColor.addEventListener('change', (e) => {
+      dbState.projects[activeIndex].color = e.target.value;
+      updatePreview();
+      updateJSONOutput();
+    });
+
+    // Tech stack (comma separated tag inputs)
+    elements.inputTechStack.addEventListener('input', (e) => {
+      const arr = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+      dbState.projects[activeIndex].techStack = arr;
+      updatePreview();
+      updateJSONOutput();
+    });
+
+    // --- Dynamic Features List ---
+    function renderFeaturesForm(features) {
+      elements.featuresList.innerHTML = '';
+      features.forEach((feat, idx) => {
+        const div = document.createElement('div');
+        div.className = 'flex gap-2 items-center';
+        div.innerHTML = `
+          <input type="text" oninput="updateFeature(${idx}, this.value)" class="w-full rounded-lg px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-indigo-500" value="${feat}">
+          <button onclick="removeFeature(${idx})" class="p-2 text-slate-500 hover:text-rose-400 rounded-lg hover:bg-rose-500/10 transition-all"><i data-lucide="minus" class="w-3.5 h-3.5"></i></button>
+        `;
+        elements.featuresList.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    window.updateFeature = function(idx, val) {
+      dbState.projects[activeIndex].features[idx] = val;
+      updateJSONOutput();
+    };
+
+    window.removeFeature = function(idx) {
+      dbState.projects[activeIndex].features.splice(idx, 1);
+      renderFeaturesForm(dbState.projects[activeIndex].features);
+      updateJSONOutput();
+    };
+
+    elements.btnAddFeature.addEventListener('click', () => {
+      if (!dbState.projects[activeIndex].features) {
+        dbState.projects[activeIndex].features = [];
+      }
+      dbState.projects[activeIndex].features.push('Fitur Utama Baru');
+      renderFeaturesForm(dbState.projects[activeIndex].features);
+      updateJSONOutput();
+    });
+
+    // --- Dynamic Credentials List ---
+    function renderCredentialsForm(creds) {
+      elements.credentialsList.innerHTML = '';
+      creds.forEach((cred, idx) => {
+        const div = document.createElement('div');
+        div.className = 'grid grid-cols-3 gap-2 items-center border border-slate-700/30 p-3 rounded-xl bg-slate-900/30';
+        div.innerHTML = `
+          <div>
+            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-0.5">Peran</label>
+            <input type="text" oninput="updateCred(${idx}, 'role', this.value)" class="w-full rounded-md px-2 py-1 text-[10px]" value="${cred.role || ''}" placeholder="Admin">
+          </div>
+          <div>
+            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-0.5">Username</label>
+            <input type="text" oninput="updateCred(${idx}, 'user', this.value)" class="w-full rounded-md px-2 py-1 text-[10px]" value="${cred.user || ''}" placeholder="admin">
+          </div>
+          <div class="flex gap-2 items-end">
+            <div class="flex-grow">
+              <label class="block text-[8px] font-bold text-slate-500 uppercase mb-0.5">Password</label>
+              <input type="text" oninput="updateCred(${idx}, 'pass', this.value)" class="w-full rounded-md px-2 py-1 text-[10px]" value="${cred.pass || ''}" placeholder="123456">
+            </div>
+            <button onclick="removeCred(${idx})" class="p-1.5 text-slate-500 hover:text-rose-400 rounded-lg hover:bg-rose-500/10 transition-all mb-0.5"><i data-lucide="minus" class="w-3.5 h-3.5"></i></button>
+          </div>
+        `;
+        elements.credentialsList.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    window.updateCred = function(idx, key, val) {
+      dbState.projects[activeIndex].credentials[idx][key] = val;
+      updateJSONOutput();
+    };
+
+    window.removeCred = function(idx) {
+      dbState.projects[activeIndex].credentials.splice(idx, 1);
+      renderCredentialsForm(dbState.projects[activeIndex].credentials);
+      updateJSONOutput();
+    };
+
+    elements.btnAddCred.addEventListener('click', () => {
+      if (!dbState.projects[activeIndex].credentials) {
+        dbState.projects[activeIndex].credentials = [];
+      }
+      dbState.projects[activeIndex].credentials.push({ role: 'Hak Akses', user: 'admin', pass: 'admin123' });
+      renderCredentialsForm(dbState.projects[activeIndex].credentials);
+      updateJSONOutput();
+    });
+
+    // --- Switch Output Tabs ---
+    elements.tabCardBtn.addEventListener('click', () => switchTab('card'));
+    elements.tabRawjsonBtn.addEventListener('click', () => switchTab('rawjson'));
+
+    function switchTab(tab) {
+      activeTab = tab;
+      if (tab === 'card') {
+        elements.tabCardBtn.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-indigo-500 bg-slate-950 text-indigo-400';
+        elements.tabRawjsonBtn.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        elements.paneCardPreview.classList.remove('hidden');
+        elements.paneRawjson.classList.add('hidden');
+      } else {
+        elements.tabRawjsonBtn.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-indigo-500 bg-slate-950 text-indigo-400';
+        elements.tabCardBtn.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        elements.paneRawjson.classList.remove('hidden');
+        elements.paneCardPreview.classList.add('hidden');
+      }
+    }
+
+    // --- Render Live Preview Card ---
+    function updatePreview() {
+      const proj = dbState.projects[activeIndex];
+      if (!proj) return;
+
+      const techBadges = (proj.techStack || []).slice(0, 3).map(tech => 
+        `<span class="badge badge-tech">${tech}</span>`
+      ).join(" ");
+
+      // Generate card markup matching exactly styles.css (Minimalist image-free design)
+      elements.previewCardBox.innerHTML = `
+        <article class="project-card" data-color="${proj.color}" style="transform: none; border-color: var(--border-color); box-shadow: var(--shadow-lg);">
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="badge badge-${proj.color}">${proj.badge || 'Kategori'}</span>
+              ${techBadges}
+            </div>
+            <h3 class="project-title">${proj.title || 'Nama Aplikasi'}</h3>
+            <p class="project-desc">${proj.desc || 'Keterangan deskripsi singkat proyek...'}</p>
+            <div class="project-footer">
+              <a href="#" onclick="return false;" class="btn btn-primary" style="flex: 1; cursor: default;">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Buka Demo</span>
+              </a>
+              <button class="btn btn-secondary" style="flex: 1; cursor: default;">
+                <i class="fas fa-info-circle"></i>
+                <span>Detail</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    // --- JSON Stringify Output ---
+    function updateJSONOutput() {
+      elements.jsonOutput.textContent = JSON.stringify(dbState, null, 2);
+    }
+
+    // Copy JSON to Clipboard
+    elements.copyBtn.addEventListener('click', async () => {
+      try {
+        const text = elements.jsonOutput.textContent;
+        await navigator.clipboard.writeText(text);
+        
+        elements.copyBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="text-emerald-400">Tersalin!</span>';
+        lucide.createIcons();
+        
+        setTimeout(() => {
+          elements.copyBtn.innerHTML = '<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin JSON';
+          lucide.createIcons();
+        }, 2000);
+      } catch (err) {
+        console.error("Gagal menyalin teks", err);
+      }
+    });
+
+    // Download projects.json File
+    elements.downloadBtn.addEventListener('click', () => {
+      const cleanJSON = JSON.stringify(dbState, null, 2);
+      const blob = new Blob([cleanJSON], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'projects.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Initialize App
+    loadInitialData();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
