@@ -1,0 +1,25 @@
+{
+  "topic": "CBT System Pro Setup",
+  "chapters": [
+    {
+      "id": "ch-1",
+      "title": "1. Pendahuluan & Konfigurasi JSON",
+      "content": "### Pendahuluan CBT System Pro\n\n**CBT System Pro** (`cbt-arjazq`) adalah aplikasi Computer Based Test tangguh yang terintegrasi dengan Android Exambrowser, AI Question Generator, serta skrip multi-deploy.\n\n---\n\n### ⚙️ Konfigurasi Daftar Instansi Sekolah\n\nSebelum menjalankan script deployment otomatis, daftarkan sekolah-sekolah tujuan Anda terlebih dahulu.\nBuka dan edit berkas konfigurasi `config/schools.json`:\n```json\n{\n  \"npsn\": \"12345678\",\n  \"nama\": \"SMA Antigravity\",\n  \"scriptId\": \"ID_SCRIPT_GOOGLE_APPS_SCRIPT_SEKOLAH_TARGET\",\n  \"email\": \"admin@sekolah.sch.id\"\n}\n```"
+    },
+    {
+      "id": "ch-2",
+      "title": "2. Multi-deployment & CLI",
+      "content": "### 🚀 Melakukan Deployment Massal\n\nGunakan skrip `deploy.js` berbasis Node.js yang sudah terintegrasi untuk memperbarui skrip Apps Script sekolah secara dinamis:\n\n#### A. Deploy ke Seluruh Instansi yang Terdaftar\nJalankan perintah ini untuk memperbarui seluruh sekolah client sekaligus:\n```bash\nnode deploy.js\n```\n\n#### B. Deploy Spesifik ke Satu Instansi Sekolah saja\nSarin target menggunakan NPSN sekolah yang diatur di JSON:\n```bash\nnode deploy.js 12345678\n```\n\n*Catatan: Skrip secara otomatis menukar Script ID lokal Anda dengan sekolah target, menyisipkan hak lisensi admin di `src/SetUp.js`, melakukan `clasp push`, lalu mengembalikan skrip lokal Anda ke kondisi default privat.*"
+    },
+    {
+      "id": "ch-3",
+      "title": "3. Integrasi Exambrowser & Keamanan",
+      "content": "### 🛡️ Keamanan Ujian Android (Exambrowser)\n\nUntuk menekan celah kecurangan siswa (seperti membuka tab pencarian web, beralih aplikasi, atau berkirim pesan), sistem ini dioptimalkan untuk **Exambrowser Android**:\n\n1. **QR-Code Scan**: Konversikan URL Web App Ujian (`/exec`) menjadi sebuah QR-Code.\n2. **Kunci Layar**: Saat siswa melakukan pemindaian QR-Code melalui aplikasi Exambrowser Android (seperti Zen Exam Browser), aplikasi akan otomatis mengunci perangkat siswa dalam mode layar penuh (*pinned screen*).\n3. **Auto-Fullscreen & Cheat Detection**: Jika siswa mencoba memaksa keluar dari mode layar penuh atau memperkecil aplikasi, skrip di sisi klien akan mencatat pelanggaran tersebut. Jika melewati batas pelanggaran toleransi, siswa akan **didiskualifikasi otomatis** dari sistem ujian.\n\n---\n\n### 🔐 Kredensial Pengujian\n- **Default Admin**: `admin` / `cbt123`"
+    },
+    {
+      "id": "ch-finish",
+      "title": "4. Selesai",
+      "content": "### 🎓 Selamat! Anda Telah Menguasai Setup CBT System Pro!\n\nSistem ujian digital Anda kini telah memiliki tingkat keamanan yang tangguh dan siap dideploy secara luas.\n\nKembali ke portal utama untuk menguji demo langsung atau mendeploy proyek GAS lainnya."
+    }
+  ]
+}

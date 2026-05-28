@@ -1,0 +1,25 @@
+{
+  "topic": "LMS Sekolah GAS Setup",
+  "chapters": [
+    {
+      "id": "ch-1",
+      "title": "1. Pendahuluan & Clasp Push",
+      "content": "### Pendahuluan LMS Sekolah GAS\n\n**LMS Sekolah GAS** adalah platform manajemen pembelajaran digital berbasis Single Page Application (SPA). Semua data materi, tugas, dan nilai tersimpan aman di spreadsheet Anda.\n\n---\n\n### 🚀 Mulai Deploy dengan Clasp\n\n#### Langkah 1: Buat Skrip Proyek Web App\nAkses direktori proyek `lms-sekolah-gas` di terminal Anda, lalu buat proyek webapp target:\n```bash\ncd lms-sekolah-gas\nclasp create --title \"LMS Sekolah GAS\" --type webapp\n```\n\n#### Langkah 2: Unggah Berkas Kode\nGunakan clasp untuk mengunggah berkas backend (`src/`) dan frontend (`html/`):\n```bash\nclasp push\n```"
+    },
+    {
+      "id": "ch-2",
+      "title": "2. Deploy Web App & Database Setup",
+      "content": "### 🌐 Menerbitkan Aplikasi Web\n\n#### Langkah 1: Deploy Aplikasi Web\n1. Jalankan `clasp open` untuk membuka editor GAS di browser.\n2. Klik tombol **Deploy** > **New Deployment** > **Web App**.\n3. Setel konfigurasi:\n   - **Execute as:** `Me (email Anda)`\n   - **Who has access:** `Anyone` (agar halaman login bisa diakses siswa).\n4. Klik **Deploy** dan salin URL Web App yang dihasilkan.\n\n---\n\n### 📊 Inisialisasi Database Spreadsheet Otomatis\n\nAplikasi ini tidak memerlukan pembuatan tabel spreadsheet secara manual satu per satu:\n1. Buka file Google Spreadsheet yang terikat dengan proyek skrip ini.\n2. Lakukan penyegaran (*refresh*) halaman spreadsheet tersebut.\n3. Anda akan melihat menu baru bertuliskan **🚀 LMS GAS** di bar menu atas spreadsheet Anda.\n4. Klik menu **🚀 LMS GAS** > **Setup Database**.\n5. Skrip backend secara otomatis akan membangun seluruh tabel (`Users`, `Courses`, `Materi`, `Tugas`) beserta akun demo default."
+    },
+    {
+      "id": "ch-3",
+      "title": "3. Akun Pengujian & Perawatan",
+      "content": "### 🔐 Akun Pengujian Default\n\nSetelah Anda mengaktifkan inisialisasi database di spreadsheet, akun pengujian berikut langsung aktif dan siap digunakan untuk login:\n\n* **Administrator**:\n  - Username: `admin`\n  - Password: `admin123`\n* **Guru Pengajar**:\n  - Username: `guru`\n  - Password: `guru123`\n* **Siswa / Pelajar**:\n  - Username: `siswa`\n  - Password: `siswa123`\n\n---\n\n### 💡 Tips Perawatan\n- **Ganti Password**: Setiap peran dapat mengganti kata sandinya masing-masing demi keamanan akun melalui tab profil.\n- **Limit Pengunggahan**: File materi berukuran besar sebaiknya diunggah ke Google Drive dan disematkan link-nya di LMS demi menghemat kuota memori spreadsheet."
+    },
+    {
+      "id": "ch-finish",
+      "title": "4. Selesai",
+      "content": "### 🎓 Selamat! Anda Telah Menguasai Setup LMS Sekolah GAS!\n\nKini aplikasi e-learning responsif berbasis SPA milik Anda telah siap dijalankan di sekolah Anda.\n\nKembali ke portal utama untuk menguji demo langsung atau mendeploy proyek GAS lainnya."
+    }
+  ]
+}

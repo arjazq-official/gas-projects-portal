@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panduan Setup SCA-BOS-GAS - Interactive Documentation</title>
+    <title>Panduan Proyek GAS - Interactive Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -24,12 +24,6 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .animate-slide-up { animation: slideUp 0.4s ease-out forwards; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
@@ -41,10 +35,10 @@
                 
                 <!-- Header Card -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                    <h1 class="font-extrabold text-xl text-slate-900 mb-2 leading-tight">SCA-BOS Guide</h1>
+                    <h1 id="topic-name" class="font-extrabold text-xl text-slate-900 mb-2 leading-tight">Panduan Setup</h1>
                     <div class="flex items-center gap-2 text-slate-500 text-xs mb-4">
                         <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
-                        <span>SCA-BOS Setup Mode</span>
+                        <span>Developer Guide Mode</span>
                     </div>
                     <div class="space-y-2">
                         <div class="flex justify-between text-xs font-bold text-slate-500">
@@ -56,46 +50,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Gamification Card -->
-                <div class="bg-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-200 text-white">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="trophy" class="w-5 h-5 text-yellow-400"></i>
-                            <span class="font-bold">Level <span id="level-val">1</span></span>
-                        </div>
-                        <div class="flex items-center gap-1 bg-white/20 px-2 py-1 rounded-lg">
-                            <i data-lucide="flame" class="w-4 h-4 text-orange-400"></i>
-                            <span class="text-xs font-bold"><span id="streak-val">1</span>d</span>
-                        </div>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-xs font-medium text-indigo-100">
-                            <span>XP: <span id="xp-val">0</span></span>
-                            <span>Sisa: <span id="next-level-xp">100</span> XP</span>
-                        </div>
-                        <div class="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
-                            <div id="xp-bar" class="h-full bg-white transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pomodoro Timer Card -->
-                <div id="pomodoro-card" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="timer" class="w-5 h-5 text-rose-500"></i>
-                            <span id="timer-label" class="font-bold text-slate-700">Waktu Fokus</span>
-                        </div>
-                        <span id="timer-display" class="font-mono text-xl font-bold text-slate-900">25:00</span>
-                    </div>
-                    <div class="flex gap-2">
-                        <button id="timer-toggle" class="flex-1 py-2 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-all">Mulai</button>
-                        <button id="timer-reset" class="p-2 bg-slate-100 text-slate-600 rounded-xl hover:bg-slate-200 transition-all">
-                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
                 
                 <!-- Table of Contents (TOC) -->
                 <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
@@ -103,7 +57,7 @@
                         <i data-lucide="list" class="w-4 h-4"></i>
                         Daftar Bab
                     </div>
-                    <div id="toc" class="max-h-[40vh] overflow-y-auto custom-scrollbar p-2 space-y-1">
+                    <div id="toc" class="max-h-[50vh] overflow-y-auto custom-scrollbar p-2 space-y-1">
                         <!-- TOC Items akan dirender dinamis -->
                     </div>
                 </div>
@@ -135,7 +89,7 @@
                         Sebelumnya
                     </button>
                     <button id="next-btn" class="flex items-center gap-2 px-8 py-4 rounded-2xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
-                        Bab Selanjutnya
+                        Selanjutnya
                         <i data-lucide="arrow-right" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -144,173 +98,21 @@
 
     </div>
 
-    <!-- Modal Quiz Container -->
-    <div id="modal-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div id="modal-content" class="bg-white rounded-[2rem] shadow-2xl max-w-lg w-full overflow-hidden animate-slide-up">
-            <div class="p-8">
-                <div id="modal-header" class="flex items-center gap-4 mb-6">
-                    <div id="modal-icon-container" class="p-3 rounded-2xl">
-                        <i id="modal-icon" class="w-6 h-6"></i>
-                    </div>
-                    <h3 id="modal-title" class="text-2xl font-bold text-slate-900"></h3>
-                </div>
-                <div id="modal-body" class="text-slate-600 leading-relaxed mb-8">
-                    <!-- Isi Kuis -->
-                </div>
-                <div id="modal-footer" class="flex justify-end gap-3">
-                    <!-- Tombol interaktif -->
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Data Panduan Khusus SCA-BOS
-        const ebook = {
-            topic: "Panduan Setup SCA-BOS-GAS",
-            level: "Intermediate",
-            language: "Bahasa Indonesia",
-            chapters: [
-                {
-                    id: "ch-intro",
-                    title: "1. Pengantar & Persiapan Clasp",
-                    content: `### Pendahuluan SCA-BOS-GAS
-
-**SCA-BOS-GAS** (Sistem Cetak Administrasi BOS) adalah aplikasi keuangan sekolah premium terintegrasi Google Sheets. 
-
-Sebelum kita mendeploy kodenya, mari persiapkan peralatan lokal Anda:
-
-#### 1. Pasang Node.js & Clasp CLI
-Instal clasp CLI secara global untuk mempermudah integrasi lokal dengan Google Apps Script:
-\`\`\`bash
-npm install -g @google/clasp
-\`\`\`
-
-#### 2. Aktifkan API Google Apps Script
-1. Masuk ke [Google Apps Script Settings](https://script.google.com/home/usersettings).
-2. Temukan opsi **Google Apps Script API** dan ganti statusnya menjadi **ON** (Aktif).
-
-#### 3. Jalankan Otentikasi
-Hubungkan CLI komputer Anda dengan akun Google Drive Anda:
-\`\`\`bash
-clasp login
-\`\`\``,
-                    quiz: {
-                        question: "Apakah status Google Apps Script API wajib disetel ke ON untuk menggunakan clasp?",
-                        options: [
-                            { id: "a", text: "Ya, wajib diaktifkan melalui setelan user Apps Script." },
-                            { id: "b", text: "Tidak perlu, clasp tetap berfungsi tanpa API." },
-                            { id: "c", text: "Hanya perlu jika kita menggunakan Mac." }
-                        ],
-                        correctAnswer: "a",
-                        explanation: "Jika Google Apps Script API tidak diaktifkan (OFF), clasp push akan gagal dan mengembalikan error otentikasi."
-                    }
-                },
-                {
-                    id: "ch-hubspoke",
-                    title: "2. Konfigurasi Hub & Spoke & Deploy",
-                    content: `### 📂 Pembagian Berkas Hub & Spoke
-
-SCA-BOS-GAS membagi kode menjadi dua komponen terpisah demi memudahkan pemeliharaan lisensi:
-1. **\`hub-master/\` (Pusat / Hub)**: Inti penanganan lisensi regional NTB dan approval durasi 1 tahun.
-2. **\`src/\` (Sekolah / Spoke)**: Dasbor transaksi dan cetak dokumen dinas sekolah.
-
----
-
-### 🚀 Alur Deployment
-
-#### Langkah 1: Hubungkan & Push Master Hub
-Edit berkas \`.clasp.json\` di direktori \`hub-master\` agar merujuk ke Script ID Spreadsheet Master Lisensi Anda. Jalankan perintah deploy:
-\`\`\`bash
-node multi-deploy.js Master
-\`\`\`
-
-#### Langkah 2: Deploy Sekolah Client (Spoke)
-Untuk mendistribusikan kode sekolah ke sekolah target secara massal, gunakan perintah otomatis:
-\`\`\`bash
-node multi-deploy.js --all-schools
-\`\`\``,
-                    quiz: {
-                        question: "Perintah terminal apa yang digunakan untuk meng-update Spreadsheet Master Lisensi Pusat secara khusus?",
-                        options: [
-                            { id: "a", text: "node multi-deploy.js --all" },
-                            { id: "b", text: "node multi-deploy.js Master" },
-                            { id: "c", text: "clasp push" }
-                        ],
-                        correctAnswer: "b",
-                        explanation: "Perintah 'node multi-deploy.js Master' secara khusus menargetkan direktori 'hub-master' untuk dikirim ke script ID master lisensi."
-                    }
-                },
-                {
-                    id: "ch-config",
-                    title: "3. Setup Triggers & Spreadsheet",
-                    content: `### ⚙️ Konfigurasi & Inisialisasi Database
-
-Setelah kode berhasil ter-push ke masing-masing spreadsheet Google, ikuti langkah ini:
-
-#### 1. Inisialisasi Spreadsheet Master Hub (Pusat)
-Di editor GAS Master, jalankan fungsi inisialisasi:
-1. **\`apiInitMasterSheet\`**: Membuat seluruh kolom spreadsheet lisensi.
-2. **\`apiInitHubData\`**: Menyiapkan regional NTB ke sheet referensi \`REF_KOTA\`.
-3. **\`installMasterTriggers\`**: Memasang trigger aktifitas otomatis 1 tahun.
-
-#### 2. Publikasikan Web App Master
-- Deploy GAS Master sebagai **Web App** dengan hak akses **Anyone** agar API-nya terbuka untuk sekolah client.
-- Salin URL Web App Master tersebut.
-
-#### 3. Daftarkan di Sekolah (Spoke)
-Di setiap spreadsheet sekolah client, buka **Project Settings** > **Script Properties**, daftarkan properti:
-- **Property:** \`LICENSE_SERVER_URL\`
-- **Value:** *[URL Web App Master Pusat]*
-
-#### 🔐 Akun Default Akurasi:
-- **Master Hub (Pusat)**: \`admin\` / \`master123\`
-- **Sekolah (Spoke)**: \`admin\` / \`123456\``,
-                    quiz: {
-                        question: "Property skrip apa yang wajib didaftarkan pada sekolah client (Spoke) agar sistem lisensi terhubung?",
-                        options: [
-                            { id: "a", text: "MASTER_LICENSE_ID" },
-                            { id: "b", text: "LICENSE_SERVER_URL" },
-                            { id: "c", text: "DATABASE_URL" }
-                        ],
-                        correctAnswer: "b",
-                        explanation: "Spoke memerlukan properti skrip 'LICENSE_SERVER_URL' yang berisi URL Web App Master untuk mengirimkan permintaan verifikasi lisensi."
-                    }
-                },
-                {
-                    id: "ch-finish",
-                    title: "4. Selesai",
-                    content: `### 🎓 Selamat! Anda Telah Menguasai Setup SCA-BOS-GAS!
-
-Kini aplikasi penanganan keuangan BOS sekolah Anda telah terkonfigurasi dengan arsitektur Hub & Spoke yang sangat aman dan terstruktur.
-
-Kembali ke portal utama untuk menguji demo langsung atau mendeploy proyek GAS lainnya.`
-                }
-            ]
-        };
-
         // State Management
-        const storageKey = 'gas_portal_scabos_state';
+        const storageKey = 'gas_portal_guide_state_' + window.location.pathname;
         const defaultState = {
-            currentIdx: 0,
-            xp: 0,
-            level: 1,
-            streak: 1,
-            timer: {
-                timeLeft: 25 * 60,
-                isActive: false,
-                mode: 'work'
-            }
+            currentIdx: 0
         };
 
         let state = { ...defaultState };
 
+        // Load saved state from LocalStorage
         const saved = localStorage.getItem(storageKey);
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
                 state = { ...defaultState, ...parsed };
-                state.timer.isActive = false;
             } catch (e) {
                 console.error("Gagal memuat state dari LocalStorage", e);
             }
@@ -320,246 +122,84 @@ Kembali ke portal utama untuk menguji demo langsung atau mendeploy proyek GAS la
         const elements = {
             progress: document.getElementById('progress-bar'),
             progressText: document.getElementById('progress-text'),
-            level: document.getElementById('level-val'),
-            streak: document.getElementById('streak-val'),
-            xp: document.getElementById('xp-val'),
-            nextLevelXp: document.getElementById('next-level-xp'),
-            xpBar: document.getElementById('xp-bar'),
-            timerLabel: document.getElementById('timer-label'),
-            timerDisplay: document.getElementById('timer-display'),
-            timerToggle: document.getElementById('timer-toggle'),
-            timerReset: document.getElementById('timer-reset'),
             toc: document.getElementById('toc'),
+            topic: document.getElementById('topic-name'),
             title: document.getElementById('chapter-title'),
             meta: document.getElementById('chapter-meta'),
             content: document.getElementById('chapter-content'),
             prevBtn: document.getElementById('prev-btn'),
-            nextBtn: document.getElementById('next-btn'),
-            modalOverlay: document.getElementById('modal-overlay'),
-            modalContent: document.getElementById('modal-content'),
-            modalTitle: document.getElementById('modal-title'),
-            modalBody: document.getElementById('modal-body'),
-            modalFooter: document.getElementById('modal-footer'),
-            modalIcon: document.getElementById('modal-icon'),
-            modalIconContainer: document.getElementById('modal-icon-container')
+            nextBtn: document.getElementById('next-btn')
         };
 
-        let timerInterval = null;
+        let ebook = null;
 
-        function updateStats() {
-            elements.level.textContent = state.level;
-            elements.streak.textContent = state.streak;
-            elements.xp.textContent = state.xp;
-            
-            const xpForNextLevel = state.level * 100;
-            elements.nextLevelXp.textContent = xpForNextLevel;
-            
-            const xpPercentage = (state.xp / xpForNextLevel) * 100;
-            elements.xpBar.style.width = `${xpPercentage}%`;
-            
-            saveSession();
-        }
-
-        function addXP(amount) {
-            state.xp += amount;
-            const xpForNextLevel = state.level * 100;
-            if (state.xp >= xpForNextLevel) {
-                state.xp -= xpForNextLevel;
-                state.level += 1;
+        // Fetch dynamic guide content from local panduan.json
+        async function loadGuide() {
+            try {
+                const response = await fetch('panduan.json');
+                ebook = await response.json();
                 
-                setTimeout(() => {
-                    showModal({
-                        title: 'Naik Level!',
-                        body: `Selamat! Anda telah naik ke **Level ${state.level}**. Pemahaman Anda mengenai setup SCA-BOS-GAS semakin meningkat.`,
-                        icon: 'award',
-                        type: 'success',
-                        footer: [{ text: 'Mantap!', primary: true }]
-                    });
-                }, 500);
-            }
-            updateStats();
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(state.timer.timeLeft / 60);
-            const seconds = state.timer.timeLeft % 60;
-            elements.timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
-
-        function toggleTimer() {
-            if (state.timer.isActive) {
-                clearInterval(timerInterval);
-                state.timer.isActive = false;
-                elements.timerToggle.textContent = 'Mulai';
-                elements.timerToggle.className = 'flex-1 py-2 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-all';
-            } else {
-                state.timer.isActive = true;
-                elements.timerToggle.textContent = 'Jeda';
-                elements.timerToggle.className = 'flex-1 py-2 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all';
+                // Set Topic Name in Sidebar Header
+                elements.topic.textContent = ebook.topic;
                 
-                timerInterval = setInterval(() => {
-                    state.timer.timeLeft--;
-                    updateTimerDisplay();
-                    
-                    if (state.timer.timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        state.timer.isActive = false;
-                        
-                        if (state.timer.mode === 'work') {
-                            addXP(50);
-                            state.timer.mode = 'break';
-                            state.timer.timeLeft = 5 * 60;
-                            elements.timerLabel.textContent = 'Waktu Istirahat';
-                            elements.timerLabel.className = 'font-bold text-emerald-600 flex items-center gap-2';
-                            
-                            showModal({
-                                title: 'Sesi Fokus Selesai!',
-                                body: 'Hebat! Anda menyelesaikan 25 menit sesi fokus. Dapatkan **+50 XP** dan istirahat selama 5 menit.',
-                                icon: 'coffee',
-                                type: 'success',
-                                footer: [{ text: 'Mulai Istirahat', primary: true, onClick: toggleTimer }]
-                            });
-                        } else {
-                            state.timer.mode = 'work';
-                            state.timer.timeLeft = 25 * 60;
-                            elements.timerLabel.textContent = 'Waktu Fokus';
-                            elements.timerLabel.className = 'font-bold text-slate-700 flex items-center gap-2';
-                            
-                            showModal({
-                                title: 'Istirahat Selesai!',
-                                body: 'Siap untuk kembali memfokuskan pikiran mempelajari setup SCA-BOS?',
-                                icon: 'timer',
-                                type: 'success',
-                                footer: [{ text: 'Mulai Fokus', primary: true, onClick: toggleTimer }]
-                            });
-                        }
-                        
-                        elements.timerToggle.textContent = 'Mulai';
-                        elements.timerToggle.className = 'flex-1 py-2 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-all';
-                        updateTimerDisplay();
-                    }
-                }, 1000);
+                // Init TOC Buttons
+                initTOC();
+                
+                // Load active chapter
+                renderChapter(state.currentIdx);
+            } catch (err) {
+                console.error("Gagal memuat berkas panduan.json: ", err);
+                elements.content.innerHTML = `
+                    <div class="text-center py-20">
+                        <i data-lucide="alert-triangle" class="w-16 h-16 text-rose-500 mx-auto mb-4"></i>
+                        <h3 class="text-2xl font-bold text-slate-800">Gagal Memuat Panduan</h3>
+                        <p class="text-slate-500 mt-2">Pastikan berkas <code>panduan.json</code> ada di direktori yang sama dan memiliki format JSON yang valid.</p>
+                    </div>
+                `;
+                lucide.createIcons();
             }
-            saveSession();
         }
 
-        function showModal(options) {
-            elements.modalTitle.textContent = options.title;
-            elements.modalBody.innerHTML = marked.parse(options.body || '');
-            elements.modalIcon.setAttribute('data-lucide', options.icon || 'info');
-            
-            elements.modalIconContainer.className = 'p-3 rounded-2xl';
-            if (options.type === 'success') {
-                elements.modalIconContainer.classList.add('bg-emerald-50', 'text-emerald-600');
-            } else if (options.type === 'error') {
-                elements.modalIconContainer.classList.add('bg-rose-50', 'text-rose-600');
-            } else {
-                elements.modalIconContainer.classList.add('bg-indigo-50', 'text-indigo-600');
-            }
-            
-            elements.modalFooter.innerHTML = '';
-            (options.footer || [{ text: 'Tutup', primary: true }]).forEach(btn => {
-                const button = document.createElement('button');
-                button.className = btn.primary ? 
-                    'px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-700 transition-all' : 
-                    'px-6 py-2.5 bg-slate-100 text-slate-600 font-bold rounded-xl text-sm hover:bg-slate-200 transition-all';
-                button.textContent = btn.text;
-                button.onclick = () => {
-                    elements.modalOverlay.classList.add('hidden');
-                    if (btn.onClick) btn.onClick();
-                };
-                elements.modalFooter.appendChild(button);
-            });
-            
-            lucide.createIcons();
-            elements.modalOverlay.classList.remove('hidden');
-        }
-
-        function startQuiz(chapter) {
-            const quiz = chapter.quiz;
-            if (!quiz) return;
-
-            const container = document.createElement('div');
-            container.className = 'space-y-4';
-            
-            const questionText = document.createElement('p');
-            questionText.className = 'font-bold text-slate-800 text-base mb-4';
-            questionText.textContent = quiz.question;
-            container.appendChild(questionText);
-
-            const optionsGrid = document.createElement('div');
-            optionsGrid.className = 'grid grid-cols-1 gap-2';
-
-            let selectedOption = null;
-            const optionButtons = [];
-
-            quiz.options.forEach(opt => {
+        // Initialize TOC
+        function initTOC() {
+            elements.toc.innerHTML = '';
+            ebook.chapters.forEach((ch, idx) => {
                 const btn = document.createElement('button');
-                btn.className = 'w-full text-left px-4 py-3 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-sm flex gap-3 items-center';
-                btn.innerHTML = `<span class="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 font-bold text-slate-600 text-xs">${opt.id.toUpperCase()}</span> <span>${opt.text}</span>`;
-                
-                btn.onclick = () => {
-                    selectedOption = opt.id;
-                    optionButtons.forEach(b => {
-                        b.className = 'w-full text-left px-4 py-3 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-sm flex gap-3 items-center';
-                    });
-                    btn.className = 'w-full text-left px-4 py-3 rounded-xl border-2 border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold transition-all text-sm flex gap-3 items-center';
-                };
-                optionButtons.push(btn);
-                optionsGrid.appendChild(btn);
+                btn.className = 'toc-item w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all border border-transparent text-slate-600 hover:bg-slate-50';
+                btn.textContent = ch.title;
+                btn.onclick = () => renderChapter(idx);
+                elements.toc.appendChild(btn);
             });
-            container.appendChild(optionsGrid);
-
-            showModal({
-                title: 'Knowledge Check',
-                body: '',
-                icon: 'help-circle',
-                type: 'quiz',
-                footer: [
-                    { text: 'Lewati Kuis', primary: false, onClick: proceedToNext },
-                    { text: 'Kirim Jawaban', primary: true, onClick: () => {
-                        if (!selectedOption) return;
-                        const isCorrect = selectedOption === quiz.correctAnswer;
-                        if (isCorrect) addXP(30);
-                        
-                        showModal({
-                            title: isCorrect ? 'Jawaban Benar!' : 'Belum Tepat',
-                            body: `${isCorrect ? 'Kerja bagus! Jawaban Anda tepat sekali.' : 'Jawaban yang benar adalah ' + quiz.correctAnswer.toUpperCase() + '.'} 
-                            
-                            ${quiz.explanation}`,
-                            icon: isCorrect ? 'check-circle' : 'x-circle',
-                            type: isCorrect ? 'success' : 'error',
-                            footer: [{ text: 'Lanjutkan', primary: true, onClick: proceedToNext }]
-                        });
-                    }}
-                ]
-            });
-            
-            document.getElementById('modal-body').appendChild(container);
         }
 
+        // Render Active Chapter
         function renderChapter(idx) {
+            if (idx < 0 || idx >= ebook.chapters.length) idx = 0;
             state.currentIdx = idx;
             const chapter = ebook.chapters[idx];
             
             elements.title.textContent = chapter.title;
             elements.meta.textContent = (chapter.id === 'ch-intro' || chapter.id === 'ch-finish') ? 'Bagian Khusus' : `Bab ${idx} dari ${ebook.chapters.length - 2}`;
             
+            // Parse Markdown
             elements.content.innerHTML = marked.parse(chapter.content || '*Tidak ada konten*');
             
+            // Update Progress bar
             const progress = ((idx + 1) / ebook.chapters.length) * 100;
             elements.progress.style.width = `${progress}%`;
             elements.progressText.textContent = `${Math.round(progress)}%`;
             
+            // Configure navigation buttons
             elements.prevBtn.disabled = idx === 0;
             
             if (idx === ebook.chapters.length - 1) {
-                elements.nextBtn.innerHTML = 'Selesaikan Membaca <i data-lucide="check-circle" class="w-5 h-5 ml-2"></i>';
+                elements.nextBtn.innerHTML = 'Selesai <i data-lucide="check-circle" class="w-5 h-5 ml-2"></i>';
             } else {
-                elements.nextBtn.innerHTML = 'Bab Selanjutnya <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>';
+                elements.nextBtn.innerHTML = 'Selanjutnya <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>';
             }
             lucide.createIcons();
             
+            // Update TOC active highlight
             document.querySelectorAll('.toc-item').forEach((el, i) => {
                 if (i === idx) {
                     el.className = 'toc-item w-full text-left px-4 py-3 rounded-xl text-sm font-bold transition-all border border-indigo-200 bg-indigo-50 text-indigo-700';
@@ -575,59 +215,26 @@ Kembali ke portal utama untuk menguji demo langsung atau mendeploy proyek GAS la
         function proceedToNext() {
             if (state.currentIdx < ebook.chapters.length - 1) {
                 renderChapter(state.currentIdx + 1);
-                addXP(20);
             } else {
-                showModal({
-                    title: 'Selamat! Dokumentasi Selesai!',
-                    body: 'Hebat! Anda telah berhasil menyelesaikan seluruh bab panduan instalasi proyek SCA-BOS-GAS!',
-                    icon: 'party-popper',
-                    type: 'success',
-                    footer: [{ text: 'Selesai & Keluar', primary: true, onClick: () => window.location.href = '../index.html' }]
-                });
+                // Back to main portal
+                window.location.href = '../index.html';
             }
         }
 
         function saveSession() {
-            const toSave = { ...state };
-            delete toSave.timer;
-            localStorage.setItem(storageKey, JSON.stringify(toSave));
+            localStorage.setItem(storageKey, JSON.stringify(state));
         }
-
-        ebook.chapters.forEach((ch, idx) => {
-            const btn = document.createElement('button');
-            btn.className = 'toc-item w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all border border-transparent text-slate-600 hover:bg-slate-50';
-            btn.textContent = ch.title;
-            btn.onclick = () => renderChapter(idx);
-            elements.toc.appendChild(btn);
-        });
 
         elements.prevBtn.onclick = () => { 
             if (state.currentIdx > 0) renderChapter(state.currentIdx - 1); 
         };
         
         elements.nextBtn.onclick = () => { 
-            const chapter = ebook.chapters[state.currentIdx];
-            if (chapter.quiz) {
-                startQuiz(chapter);
-            } else {
-                proceedToNext();
-            }
-        };
-        
-        elements.timerToggle.onclick = toggleTimer;
-        elements.timerReset.onclick = () => {
-            clearInterval(timerInterval);
-            state.timer.isActive = false;
-            state.timer.timeLeft = state.timer.mode === 'work' ? 25 * 60 : 5 * 60;
-            updateTimerDisplay();
-            elements.timerToggle.textContent = 'Mulai';
-            elements.timerToggle.className = 'flex-1 py-2 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-all';
+            proceedToNext();
         };
 
-        lucide.createIcons();
-        updateStats();
-        updateTimerDisplay();
-        renderChapter(state.currentIdx);
+        // Init App
+        loadGuide();
     </script>
 </body>
 </html>
