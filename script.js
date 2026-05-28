@@ -201,6 +201,9 @@ function openProjectDetails(key) {
   const codeBlock = document.getElementById("setup-code-block");
   codeBlock.textContent = data.setupGuide;
 
+  // Set dedicated project guide link
+  document.getElementById("modal-guide-link").href = data.demoUrl + "panduan.html";
+
   // Open first tab by default
   switchTab("features");
 
