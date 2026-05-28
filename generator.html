@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Generator - Pembuat Panduan Google Apps Script</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Alat generator panduan dinamis untuk memformat data dokumentasi Markdown menjadi file panduan.json yang valid secara otomatis.">
+  <meta name="keywords" content="JSON Generator, Google Apps Script, Markdown, Portal, Panduan">
+  <meta name="author" content="ArjazQ & Antigravity">
+
+  <!-- Tailwind CSS & Marked.js -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .prose pre { background-color: #0f172a; color: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; margin: 1rem 0; }
+    .prose code { font-family: 'JetBrains Mono', monospace; color: #db2777; background-color: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; }
+    .prose pre code { color: inherit; background-color: transparent; padding: 0; }
+    .prose h1, .prose h2, .prose h3 { color: #0f172a; font-weight: 800; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .prose h3 { font-size: 1.25rem; }
+    .prose p { margin-bottom: 1rem; line-height: 1.6; color: #334155; }
+    .prose ul, .prose ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+    .prose li { margin-bottom: 0.35rem; }
+    .prose blockquote { border-left: 4px solid #cbd5e1; padding-left: 1rem; font-style: italic; color: #475569; margin: 1rem 0; }
+    
+    /* Custom Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+  
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    
+    <!-- HEADER -->
+    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-800" id="generator-header">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-1 bg-indigo-500/20 text-indigo-400 rounded-lg text-xs font-bold uppercase tracking-wider">Developer Tool</span>
+          <h1 class="text-2xl font-extrabold text-white">Panduan JSON Generator</h1>
+        </div>
+        <p class="text-slate-400 text-sm">Tulis panduan Anda dalam Markdown, lihat pratinjau langsung, dan unduh berkas <code>panduan.json</code> tanpa pusing memikirkan pemformatan karakter escape.</p>
+      </div>
+      <a href="index.html" class="flex items-center gap-2 px-4 py-2.5 bg-slate-800 text-slate-200 font-bold rounded-xl border border-slate-700 hover:bg-slate-700 hover:text-white transition-all text-xs" id="back-to-portal-btn">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        Kembali ke Portal
+      </a>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- EDITOR AREA (Kiri) -->
+      <section class="lg:col-span-6 space-y-6" aria-label="Area Edit Konten">
+        
+        <!-- Metadata Umum -->
+        <div class="bg-slate-800/50 backdrop-blur border border-slate-700/80 p-6 rounded-3xl space-y-4">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="settings" class="w-5 h-5 text-indigo-400"></i>
+            Identitas Panduan
+          </h2>
+          <div>
+            <label for="topic-input" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nama Topik Panduan</label>
+            <input type="text" id="topic-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all" placeholder="Contoh: SCA-BOS-GAS Setup" value="Panduan Setup Baru">
+          </div>
+        </div>
+
+        <!-- Daftar Bab -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center px-2">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="book-open" class="w-5 h-5 text-indigo-400"></i>
+              Daftar Bab (<span id="chapter-count">0</span>)
+            </h2>
+            <button id="add-chapter-btn" class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-indigo-900/30">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              Tambah Bab
+            </button>
+          </div>
+          
+          <div id="chapters-list-container" class="space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
+            <!-- Bab akan dirender secara dinamis -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- OUTPUT & PREVIEW AREA (Kanan) -->
+      <section class="lg:col-span-6 space-y-6" aria-label="Pratinjau dan Output JSON">
+        
+        <div class="bg-slate-800/50 backdrop-blur border border-slate-700/80 rounded-3xl overflow-hidden flex flex-col min-h-[75vh]">
+          
+          <!-- Tab Navigation -->
+          <div class="flex border-b border-slate-700 bg-slate-800/80 px-4 pt-4 justify-between items-center gap-4">
+            <nav class="flex gap-2" aria-label="Navigasi Output">
+              <button id="tab-preview-btn" class="px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-indigo-500 bg-slate-950 text-indigo-400">
+                Pratinjau Bab
+              </button>
+              <button id="tab-json-btn" class="px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+                Berkas panduan.json
+              </button>
+            </nav>
+            
+            <div class="flex gap-2 pb-2">
+              <button id="copy-json-btn" class="flex items-center gap-1 px-3 py-1.5 bg-slate-750 border border-slate-600 text-slate-200 hover:text-white hover:bg-slate-700 text-xs font-bold rounded-lg transition-all">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                Salin JSON
+              </button>
+              <button id="download-json-btn" class="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                Unduh JSON
+              </button>
+            </div>
+          </div>
+
+          <!-- Tab Content Area -->
+          <div class="p-6 flex-grow flex flex-col bg-slate-950">
+            
+            <!-- Pane 1: Live Preview -->
+            <div id="pane-preview" class="space-y-6 flex-grow">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <span id="preview-meta" class="text-indigo-400 font-bold uppercase tracking-widest text-[10px]">BAB 1 dari 1</span>
+                  <h3 id="preview-title" class="text-xl font-extrabold text-white mt-1 leading-tight">Judul Bab</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                  <label for="select-preview-chapter" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Lihat Bab:</label>
+                  <select id="select-preview-chapter" class="bg-slate-900 border border-slate-700 text-slate-300 rounded-lg px-2 py-1 text-xs focus:outline-none">
+                    <!-- Dropdown bab dinamis -->
+                  </select>
+                </div>
+              </div>
+              
+              <!-- Container Render Markdown -->
+              <div id="preview-content-box" class="prose max-w-none text-slate-300 bg-white p-6 rounded-2xl min-h-[40vh] overflow-y-auto custom-scrollbar">
+                <!-- Hasil render marked.js akan muncul di sini -->
+              </div>
+            </div>
+
+            <!-- Pane 2: JSON Code -->
+            <div id="pane-json" class="hidden flex-grow flex flex-col">
+              <pre class="bg-slate-900 border border-slate-800 text-indigo-300 p-4 rounded-xl font-mono text-xs overflow-auto flex-grow max-h-[60vh] custom-scrollbar select-all" id="json-output-text">
+                <!-- JSON string yang terformat akan muncul di sini -->
+              </pre>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+  <script>
+    // State Management
+    let guideState = {
+      topic: "Panduan Setup Baru",
+      chapters: [
+        {
+          id: "ch-1",
+          title: "1. Pendahuluan",
+          content: "### Selamat Datang di Panduan Anda\n\nTulis isi panduan Anda di dalam editor sebelah kiri menggunakan sintaksis **Markdown**.\n\n---\n\n### ⚙️ Contoh Teks Kode & Perintah\nInstal alat clasp menggunakan baris perintah berikut:\n```bash\nnpm install -g @google/clasp\n```\n\n> **💡 TIPS KHUSUS**\n> Seluruh pratinjau yang Anda lihat di bawah ini merupakan representasi tampilan asli saat panduan dijalankan di browser."
+        }
+      ]
+    };
+
+    let activeTab = 'preview';
+    let currentPreviewIdx = 0;
+
+    // DOM Elements
+    const elements = {
+      topicInput: document.getElementById('topic-input'),
+      chapterCount: document.getElementById('chapter-count'),
+      chaptersList: document.getElementById('chapters-list-container'),
+      addBtn: document.getElementById('add-chapter-btn'),
+      tabPreviewBtn: document.getElementById('tab-preview-btn'),
+      tabJsonBtn: document.getElementById('tab-json-btn'),
+      panePreview: document.getElementById('pane-preview'),
+      paneJson: document.getElementById('pane-json'),
+      previewMeta: document.getElementById('preview-meta'),
+      previewTitle: document.getElementById('preview-title'),
+      previewSelect: document.getElementById('select-preview-chapter'),
+      previewContent: document.getElementById('preview-content-box'),
+      jsonOutput: document.getElementById('json-output-text'),
+      copyBtn: document.getElementById('copy-json-btn'),
+      downloadBtn: document.getElementById('download-json-btn')
+    };
+
+    // Event Listener Topic Name
+    elements.topicInput.addEventListener('input', (e) => {
+      guideState.topic = e.target.value;
+      updateJSONOutput();
+    });
+
+    // Add Chapter
+    elements.addBtn.addEventListener('click', () => {
+      const newIdx = guideState.chapters.length + 1;
+      const isFinish = newIdx === 4; // Auto finish placeholder for standard 4-chapter guides
+      
+      const newChapter = {
+        id: isFinish ? "ch-finish" : `ch-${newIdx}`,
+        title: `${newIdx}. ${isFinish ? 'Selesai' : 'Bab Baru'}`,
+        content: `### 📝 Isi Bab ${newIdx}\n\nTulis konten bab Anda di sini.`
+      };
+      
+      guideState.chapters.push(newChapter);
+      renderChaptersForm();
+      currentPreviewIdx = guideState.chapters.length - 1;
+      renderPreview();
+      updateJSONOutput();
+    });
+
+    // Switch Tabs
+    elements.tabPreviewBtn.addEventListener('click', () => switchTab('preview'));
+    elements.tabJsonBtn.addEventListener('click', () => switchTab('json'));
+
+    function switchTab(tab) {
+      activeTab = tab;
+      if (tab === 'preview') {
+        elements.tabPreviewBtn.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-indigo-500 bg-slate-950 text-indigo-400';
+        elements.tabJsonBtn.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        elements.panePreview.classList.remove('hidden');
+        elements.paneJson.classList.add('hidden');
+      } else {
+        elements.tabJsonBtn.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-indigo-500 bg-slate-950 text-indigo-400';
+        elements.tabPreviewBtn.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition-all border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        elements.paneJson.classList.remove('hidden');
+        elements.panePreview.classList.add('hidden');
+      }
+    }
+
+    // Render Forms for all chapters in State
+    function renderChaptersForm() {
+      elements.chapterCount.textContent = guideState.chapters.length;
+      elements.chaptersList.innerHTML = '';
+      
+      guideState.chapters.forEach((ch, idx) => {
+        const card = document.createElement('div');
+        card.className = 'bg-slate-800 border border-slate-700/50 p-5 rounded-2xl space-y-4 relative group';
+        
+        card.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="px-2.5 py-0.5 bg-slate-900 text-slate-400 rounded-md text-[10px] font-bold uppercase tracking-wider">Bab #${idx + 1}</span>
+            <button onclick="deleteChapter(${idx})" class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-500/10 transition-all" title="Hapus Bab">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-3 gap-3">
+            <div class="col-span-2">
+              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Judul Bab</label>
+              <input type="text" oninput="updateChapterField(${idx}, 'title', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" value="${ch.title}">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">ID Unik</label>
+              <input type="text" oninput="updateChapterField(${idx}, 'id', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" value="${ch.id}">
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Konten Markdown</label>
+            <textarea oninput="updateChapterField(${idx}, 'content', this.value)" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-300 focus:outline-none focus:border-indigo-500 custom-scrollbar" placeholder="Tulis konten Markdown di sini...">${ch.content}</textarea>
+          </div>
+        `;
+        
+        elements.chaptersList.appendChild(card);
+      });
+      
+      lucide.createIcons();
+      updatePreviewDropdown();
+    }
+
+    // Update Field Real-Time
+    window.updateChapterField = function(idx, field, value) {
+      guideState.chapters[idx][field] = value;
+      updateJSONOutput();
+      if (idx === currentPreviewIdx) {
+        renderPreview();
+      }
+    };
+
+    // Delete Chapter
+    window.deleteChapter = function(idx) {
+      if (guideState.chapters.length <= 1) {
+        alert("Panduan harus memiliki minimal 1 bab.");
+        return;
+      }
+      guideState.chapters.splice(idx, 1);
+      if (currentPreviewIdx >= guideState.chapters.length) {
+        currentPreviewIdx = guideState.chapters.length - 1;
+      }
+      renderChaptersForm();
+      renderPreview();
+      updateJSONOutput();
+    };
+
+    // Update Dropdown Chapter Select in Preview
+    function updatePreviewDropdown() {
+      elements.previewSelect.innerHTML = '';
+      guideState.chapters.forEach((ch, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = ch.title || `Bab ${idx + 1}`;
+        elements.previewSelect.appendChild(opt);
+      });
+      elements.previewSelect.value = currentPreviewIdx;
+    }
+
+    elements.previewSelect.addEventListener('change', (e) => {
+      currentPreviewIdx = parseInt(e.target.value);
+      renderPreview();
+    });
+
+    // Render markdown preview
+    function renderPreview() {
+      if (guideState.chapters.length === 0) return;
+      const ch = guideState.chapters[currentPreviewIdx];
+      
+      const total = guideState.chapters.length;
+      elements.previewMeta.textContent = (ch.id === 'ch-intro' || ch.id === 'ch-finish') ? 'Bagian Khusus' : `Bab ${currentPreviewIdx + 1} dari ${total}`;
+      elements.previewTitle.textContent = ch.title || "Tidak ada judul";
+      
+      // Render Markdown via marked.js
+      elements.previewContent.innerHTML = marked.parse(ch.content || '*Tidak ada konten*');
+    }
+
+    // Stringify state to JSON formatted text
+    function updateJSONOutput() {
+      const cleanJSON = JSON.stringify(guideState, null, 2);
+      elements.jsonOutput.textContent = cleanJSON;
+    }
+
+    // Copy JSON to Clipboard
+    elements.copyBtn.addEventListener('click', async () => {
+      try {
+        const text = elements.jsonOutput.textContent;
+        await navigator.clipboard.writeText(text);
+        
+        elements.copyBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="text-emerald-400">Tersalin!</span>';
+        lucide.createIcons();
+        
+        setTimeout(() => {
+          elements.copyBtn.innerHTML = '<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin JSON';
+          lucide.createIcons();
+        }, 2000);
+      } catch (err) {
+        console.error("Gagal menyalin teks", err);
+      }
+    });
+
+    // Download panduan.json File
+    elements.downloadBtn.addEventListener('click', () => {
+      const cleanJSON = JSON.stringify(guideState, null, 2);
+      const blob = new Blob([cleanJSON], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'panduan.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Initialize App
+    renderChaptersForm();
+    renderPreview();
+    updateJSONOutput();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
