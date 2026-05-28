@@ -17,8 +17,13 @@
       "content": "### 💡 Menampilkan Catatan & Kutipan (Blockquote)\n\nAnda dapat menambahkan catatan khusus, peringatan, atau petunjuk penting dengan menggunakan tanda lebih besar dari (`> `) di awal baris. Ini akan dirender dengan garis pembatas abu-abu di sisi kiri bergaya elegan.\n\n> **⚠️ PERINGATAN PENTING**\n> Pastikan Anda telah mengaktifkan **Google Apps Script API** di Google Akun Anda terlebih dahulu sebelum menjalankan clasp, jika tidak, proses deployment akan mengalami penolakan akses (Error 403).\n\n> **💡 TIPS PRODUKTIVITAS**\n> Selalu gunakan Google Chrome atau browser berbasis Chromium saat melakukan pengujian antarmuka portal agar fitur modal dialog dapat beroperasi secara optimal."
     },
     {
+      "id": "ch-media",
+      "title": "4. Contoh Foto & Link Video YouTube",
+      "content": "### 🖼️ Menyematkan Foto & Gambar\n\nUntuk menyisipkan gambar atau foto, gunakan format Markdown standar:\n`![Nama Alternatif](URL_GAMBAR)`\n\n*Contoh Tampilan Gambar:*\n![Logo Google Apps Script](https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_Apps_Script_logo.svg)\n\n---\n\n### 🎥 Menyematkan Tautan & Video YouTube\n\nAnda dapat menambahkan video YouTube dengan dua cara berikut:\n\n#### Cara A: Gambar Pratinjau Klik YouTube (Sangat Direkomendasikan)\nMetode ini memuat gambar sampul video dari server YouTube secara otomatis dan menjadikannya tautan aktif yang membuka YouTube ketika diklik:\n`[![Tonton di YouTube](https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)`\n\n*Contoh Pratinjau Klik:*\n[![Tonton di YouTube](https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)\n\n#### Cara B: Sematan Pemutar Video Langsung (HTML Iframe)\nKarena editor merender sintaksis HTML secara aman, Anda dapat menggunakan tag `<iframe>` bawaan YouTube. CSS portal secara otomatis menyeimbangkan skala 16:9 responsif:\n`<iframe src=\"https://www.youtube.com/embed/dQw4w9WgXcQ\" title=\"YouTube Player\" allowfullscreen></iframe>`"
+    },
+    {
       "id": "ch-finish",
-      "title": "4. Contoh Halaman Penutup",
+      "title": "5. Contoh Halaman Penutup",
       "content": "### 🎓 Panduan Selesai!\n\nTemplate ini berisi contoh-contoh visual lengkap yang didukung oleh struktur CSS `.prose` pada halaman panduan Anda.\n\nSilakan hapus atau ubah isi data JSON ini sesuai dengan petunjuk teknis sesungguhnya dari aplikasi yang Anda buat."
     }
   ]
