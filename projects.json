@@ -19,7 +19,7 @@
         "Sistem multi-deploy massal untuk update instan ke ratusan sekolah client via CLI."
       ],
       "credentials": [
-        { "role": "Sekolah / Client (Spoke)", "user": "admin", "pass": "123456" },
+        { "role": "Sekolah / Client (Spoke)", "user": "admin", "pass": "123456" }
       ],
       "setupGuide": "// Langkah 1: Persiapan Lingkungan\n// Pastikan Node.js terinstal, lalu instal clasp & login:\nnpm install -g @google/clasp\nclasp login\n\n// Langkah 2: Inisialisasi Master Hub (Pusat)\n// Buka Spreadsheet Master Lisensi Anda, hubungkan dengan clasp dan push folder:\nnode multi-deploy.js Master\n\n// Langkah 3: Setup Kolom & Triggers Master\n// Di editor GAS Master, jalankan fungsi:\n1. apiInitMasterSheet  // Menyiapkan susunan kolom\n2. apiInitHubData      // Mengisi data dropdown Kabupaten NTB\n3. installMasterTriggers // Mengaktifkan durasi expired otomatis 1 tahun\n\n// Langkah 4: Hubungkan Sekolah (Client/Spoke)\n// Deploy GAS Master sebagai Web App (Access: Anyone) dan salin URL-nya.\n// Di setiap naskah GAS sekolah, tambahkan Script Property:\nLICENSE_SERVER_URL = \"URL_WEB_APP_MASTER_ANDA\"\n\n// Langkah 5: Distribusikan Update Massal\n// Jalankan update ke seluruh sekolah terdaftar secara otomatis:\nnode multi-deploy.js --all-schools"
     },
