@@ -12,15 +12,14 @@
       "desc": "Sistem Cetak Administrasi BOS sekolah terintegrasi Spreadsheet. Mempermudah perencanaan anggaran, pencatatan transaksi, kuitansi, dan dokumen dinas.",
       "features": [
         "Arsitektur Hub & Spoke memisahkan Master Hub (Pusat) dan Spoke (Sekolah) secara otomatis.",
-        "Manajemen Lisensi Terpusat (License Hub) dengan inisialisasi regional Kabupaten NTB.",
+        "Manajemen Lisensi Terpusat (License Hub) dengan inisialisasi regional",
         "Otomatisasi masa berlaku lisensi selama 1 tahun dan validasi ID laptop pengguna.",
         "Panduan konsultasi Telegram terintegrasi langsung pada halaman login.",
         "Otomatis menyiapkan struktur spreadsheet dan kolom master lisensi lewat sekali run.",
         "Sistem multi-deploy massal untuk update instan ke ratusan sekolah client via CLI."
       ],
       "credentials": [
-        { "role": "Master Hub (Pusat)", "user": "admin", "pass": "master123" },
-        { "role": "Sekolah / Client (Spoke)", "user": "admin", "pass": "123456" }
+        { "role": "Sekolah / Client (Spoke)", "user": "admin", "pass": "123456" },
       ],
       "setupGuide": "// Langkah 1: Persiapan Lingkungan\n// Pastikan Node.js terinstal, lalu instal clasp & login:\nnpm install -g @google/clasp\nclasp login\n\n// Langkah 2: Inisialisasi Master Hub (Pusat)\n// Buka Spreadsheet Master Lisensi Anda, hubungkan dengan clasp dan push folder:\nnode multi-deploy.js Master\n\n// Langkah 3: Setup Kolom & Triggers Master\n// Di editor GAS Master, jalankan fungsi:\n1. apiInitMasterSheet  // Menyiapkan susunan kolom\n2. apiInitHubData      // Mengisi data dropdown Kabupaten NTB\n3. installMasterTriggers // Mengaktifkan durasi expired otomatis 1 tahun\n\n// Langkah 4: Hubungkan Sekolah (Client/Spoke)\n// Deploy GAS Master sebagai Web App (Access: Anyone) dan salin URL-nya.\n// Di setiap naskah GAS sekolah, tambahkan Script Property:\nLICENSE_SERVER_URL = \"URL_WEB_APP_MASTER_ANDA\"\n\n// Langkah 5: Distribusikan Update Massal\n// Jalankan update ke seluruh sekolah terdaftar secara otomatis:\nnode multi-deploy.js --all-schools"
     },
@@ -71,6 +70,34 @@
         { "role": "Akun Administrator Default", "user": "admin", "pass": "cbt123" }
       ],
       "setupGuide": "// Langkah 1: Setup Daftar Sekolah (Sekolah Mandiri/Cabang)\n// Edit file 'config/schools.json' untuk mendaftarkan instansi baru:\n{\n  \"npsn\": \"12345678\",\n  \"nama\": \"SMA Antigravity\",\n  \"scriptId\": \"ID_SCRIPT_GOOGLE_APPS_SCRIPT_SEKOLAH\",\n  \"email\": \"admin@sekolah.sch.id\"\n}\n\n// Langkah 2: Deploy Otomatis Menggunakan Node.js\n// Untuk mendeploy naskah ke SEMUA sekolah sekaligus:\nnode deploy.js\n\n// Atau deploy khusus ke SATU target sekolah saja (filter NPSN):\nnode deploy.js 12345678\n\n// Langkah 3: Konfigurasi Keamanan Android (Integritas Ujian)\n1. Buka aplikasi Exambrowser (misalnya Zen Exam Browser) di HP siswa.\n2. Generate QR Code dari URL Web App ujian menggunakan QRCode Monkey.\n3. Siswa cukup melakukan Scan QR Code yang disediakan oleh pengawas ujian.\n4. Aplikasi akan mengunci layar siswa dan langsung membuka halaman login ujian."
+    },
+    {
+      "key": "api-pres-simpegnas",
+      "title": "API Presensi Simpegnas",
+      "subtitle": "Sub-judul Penjelas Aplikasi",
+      "badge": "Kategori",
+      "color": "purple",
+      "techStack": [
+        "Google Apps Script",
+        "Google Sheets"
+      ],
+      "githubUrl": "https://github.com/arjazq/api-pres-simpegnas",
+      "demoUrl": "api-pres-simpegnas/",
+      "desc": "Aplikasi untuk memantau Rekap Presensi dari Api Simpegnas",
+      "features": [
+        "Rekap Presensi Kantor",
+        "Cek Riwayat Presensi masing-masing ASN",
+        "Cek Fake GPS",
+        "Cek Foto Presensi ASN"
+      ],
+      "credentials": [
+        {
+          "role": "Administrator",
+          "user": "admin",
+          "pass": "admin123"
+        }
+      ],
+      "setupGuide": "// Langkah 1: Kloning repositori..."
     }
   ]
 }

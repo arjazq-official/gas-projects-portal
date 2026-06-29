@@ -1,0 +1,25 @@
+{
+  "topic": "SCA-BOS-GAS Setup",
+  "chapters": [
+    {
+      "id": "ch-1",
+      "title": "1. Pengantar & Persiapan Clasp",
+      "content": "### Pendahuluan SCA-BOS-GAS\n\n**SCA-BOS-GAS** (Sistem Cetak Administrasi BOS) adalah aplikasi keuangan sekolah premium terintegrasi Google Sheets.\n\nSebelum kita mendeploy kodenya, mari persiapkan peralatan lokal Anda:\n\n#### 1. Pasang Node.js & Clasp CLI\nInstal clasp CLI secara global untuk mempermudah integrasi lokal dengan Google Apps Script:\n```bash\nnpm install -g @google/clasp\n```\n\n#### 2. Aktifkan API Google Apps Script\n1. Masuk ke [Google Apps Script Settings](https://script.google.com/home/usersettings).\n2. Temukan opsi **Google Apps Script API** dan ganti statusnya menjadi **ON** (Aktif).\n\n#### 3. Jalankan Otentikasi\nHubungkan CLI komputer Anda dengan akun Google Drive Anda:\n```bash\nclasp login\n```"
+    },
+    {
+      "id": "ch-2",
+      "title": "2. Konfigurasi Hub & Spoke & Deploy",
+      "content": "### 📂 Pembagian Berkas Hub & Spoke\n\nSCA-BOS-GAS membagi kode menjadi dua komponen terpisah demi memudahkan pemeliharaan lisensi:\n1. **`hub-master/` (Pusat / Hub)**: Inti penanganan lisensi regional NTB dan approval durasi 1 tahun.\n2. **`src/` (Sekolah / Spoke)**: Dasbor transaksi dan cetak dokumen dinas sekolah.\n\n---\n\n### 🚀 Alur Deployment\n\n#### Langkah 1: Hubungkan & Push Master Hub\nEdit berkas `.clasp.json` di direktori `hub-master` agar merujuk ke Script ID Spreadsheet Master Lisensi Anda. Jalankan perintah deploy:\n```bash\nnode multi-deploy.js Master\n```\n\n#### Langkah 2: Deploy Sekolah Client (Spoke)\nUntuk mendistribusikan kode sekolah ke sekolah target secara massal, gunakan perintah otomatis:\n```bash\nnode multi-deploy.js --all-schools\n```"
+    },
+    {
+      "id": "ch-3",
+      "title": "3. Setup Triggers & Spreadsheet",
+      "content": "### ⚙️ Konfigurasi & Inisialisasi Database\n\nSetelah kode berhasil ter-push ke masing-masing spreadsheet Google, ikuti langkah ini:\n\n#### 1. Inisialisasi Spreadsheet Master Hub (Pusat)\nDi editor GAS Master, jalankan fungsi inisialisasi:\n1. **`apiInitMasterSheet`**: Membuat seluruh kolom spreadsheet lisensi.\n2. **`apiInitHubData`**: Menyiapkan regional NTB ke sheet referensi `REF_KOTA`.\n3. **`installMasterTriggers`**: Memasang trigger aktifitas otomatis 1 tahun.\n\n#### 2. Publikasikan Web App Master\n- Deploy GAS Master sebagai **Web App** dengan hak akses **Anyone** agar API-nya terbuka untuk sekolah client.\n- Salin URL Web App Master tersebut.\n\n#### 3. Daftarkan di Sekolah (Spoke)\nDi setiap spreadsheet sekolah client, buka **Project Settings** > **Script Properties**, daftarkan properti:\n- **Property:** `LICENSE_SERVER_URL`\n- **Value:** *[URL Web App Master Pusat]*\n\n#### 🔐 Akun Default Akurasi:\n- **Master Hub (Pusat)**: `admin` / `master123`\n- **Sekolah (Spoke)**: `admin` / `123456`"
+    },
+    {
+      "id": "ch-finish",
+      "title": "4. Selesai",
+      "content": "### 🎓 Selamat! Anda Telah Menguasai Setup SCA-BOS-GAS!\n\nKini aplikasi penanganan keuangan BOS sekolah Anda telah terkonfigurasi dengan arsitektur Hub & Spoke yang sangat aman dan terstruktur.\n\nKembali ke portal utama untuk menguji demo langsung atau mendeploy proyek GAS lainnya."
+    }
+  ]
+}
